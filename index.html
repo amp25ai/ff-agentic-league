@@ -756,11 +756,28 @@
         currentWeek = Math.max(1, Math.min(TOTAL_WEEKS, currentWeek + direction));
         loadMatchups();
     }
-    
+
     function goToCurrentWeek() {
-        currentWeek = 1; // Update this to current NFL week once season starts
-        loadMatchups();
+        fetch('https://api.sleeper.app/v1/state/nfl')
+            .then(r => r.json())
+            .then(state => {
+                currentWeek = state.week || 1;
+                loadMatchups();
+            })
+            .catch(() => {
+                currentWeek = 1;
+                loadMatchups();
+            });
     }
+
+    // Auto-set to current NFL week on page load
+    fetch('https://api.sleeper.app/v1/state/nfl')
+        .then(r => r.json())
+        .then(state => {
+            currentWeek = state.week || 1;
+            loadMatchups();
+        })
+        .catch(() => loadMatchups());
     
 
     function loadTrades() {
