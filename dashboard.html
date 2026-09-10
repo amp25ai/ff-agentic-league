@@ -452,7 +452,7 @@
 
     // Load draft results
     function loadDraft() {
-        fetch('draft_results.json')
+        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/draft_results.json')
             .then(r => r.json())
             .then(data => {
                 const picks = data.draft || [];
