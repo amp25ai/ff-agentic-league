@@ -3,23 +3,59 @@ import os
 import anthropic
 from players import get_nfl_players
 
-# Load API key
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
-# 8 agents with different strategies
-AGENTS = [
-    {"name": "Team Alpha", "strategy": "Always draft the best available running back early. Prioritize RB heavily in rounds 1-4."},
-    {"name": "Team Beta", "strategy": "Zero RB strategy. Draft WRs early and pick up RBs later."},
-    {"name": "Team Gamma", "strategy": "Always take the best player available regardless of position."},
-    {"name": "Team Delta", "strategy": "Prioritize QBs early. Having an elite QB wins leagues."},
-    {"name": "Team Epsilon", "strategy": "Target high upside young players and handcuffs."},
-    {"name": "Team Zeta", "strategy": "Safe floor players only. No risk, high floor every pick."},
-    {"name": "Team Eta", "strategy": "Target TEs early. Elite TE is a huge advantage."},
-    {"name": "Team Theta", "strategy": "Balanced approach. Best player available with positional need considered."},
-]
+# League settings
+NUM_TEAMS = 4
+ROSTER_SLOTS = 14  # 1 QB, 2 RB, 2 WR, 1 TE, 1 FLEX, 1 K, 6 bench
 
-ROSTER_SLOTS = 15  # picks per team
-NUM_TEAMS = 8
+ROSTER_NEEDS = {
+    "QB": 1,
+    "RB": 2,
+    "WR": 2,
+    "TE": 1,
+    "K": 1,
+    "FLEX": 1,  # RB/WR/TE
+    "BENCH": 6
+}
+
+# 4 agents - replace strategy with each family member's prompt
+def load_strategy(filename):
+    """Load strategy from text file"""
+    path = f"strategies/{filename}.txt"
+    try:
+        with open(path, "r") as f:
+            content = f.read().strip()
+            if content:
+                return content
+            else:
+                return "Best player available every round. Fill starter positions first."
+    except FileNotFoundError:
+        print(f"⚠️ No strategy file found for {filename}, using default")
+        return "Best player available every round. Fill starter positions first."
+
+AGENTS = [
+    {
+        "name": "Team Ched",
+        "owner": "Ched",
+        "strategy": load_strategy("ched")
+    },
+    {
+        "name": "Team JPI",
+        "owner": "JPI",
+        "strategy": load_strategy("jpi")
+    },
+    {
+        "name": "Team Naesh",
+        "owner": "Naesh",
+        "strategy": load_strategy("naesh")
+    },
+    {
+        "name": "Team Mert",
+        "owner": "Mert",
+        "strategy": load_strategy("mert")
+    },
+]
 
 def snake_draft_order(num_teams, num_rounds):
     """Generate snake draft pick order"""
@@ -31,31 +67,59 @@ def snake_draft_order(num_teams, num_rounds):
             order += list(range(num_teams - 1, -1, -1))
     return order
 
-def agent_pick(agent, available_players, roster, pick_number):
+def get_roster_summary(roster):
+    """Summarize what positions a team still needs"""
+    counts = {"QB": 0, "RB": 0, "WR": 0, "TE": 0, "K": 0}
+    for player in roster:
+        pos = player["position"]
+        if pos in counts:
+            counts[pos] += 1
+    
+    needs = []
+    if counts["QB"] < 1: needs.append("QB (need 1)")
+    if counts["RB"] < 2: needs.append(f"RB (have {counts['RB']}, need 2)")
+    if counts["WR"] < 2: needs.append(f"WR (have {counts['WR']}, need 2)")
+    if counts["TE"] < 1: needs.append("TE (need 1)")
+    if counts["K"] < 1: needs.append("K (need 1)")
+    
+    return counts, needs
+
+def agent_pick(agent, available_players, roster, pick_number, round_num):
     """Ask Claude to make a pick for an agent"""
     
-    # Get top 50 available players to show Claude
-    top_available = list(available_players.values())[:50]
+    # Show top 30 available players
+    top_available = list(available_players.values())[:30]
     available_str = "\n".join([
-        f"{p['name']} - {p['position']} - {p['team']}" 
+        f"- {p['name']} ({p['position']} - {p['team']})"
         for p in top_available
     ])
     
     roster_str = "\n".join([
-        f"{p['name']} - {p['position']}" 
+        f"- {p['name']} ({p['position']})"
         for p in roster
-    ]) if roster else "Empty roster"
+    ]) if roster else "Empty - no players yet"
 
-    prompt = f"""You are a fantasy football agent with this strategy: {agent['strategy']}
+    counts, needs = get_roster_summary(roster)
+    needs_str = ", ".join(needs) if needs else "All starters filled - drafting bench"
+
+    prompt = f"""You are a fantasy football agent in a 4-team PPR league (1 point per reception).
+
+Your draft strategy: {agent['strategy']}
+
+Current round: {round_num} of 14
+Overall pick: #{pick_number}
 
 Your current roster:
 {roster_str}
 
-Available players (top 50):
+Positions still needed: {needs_str}
+
+Top available players:
 {available_str}
 
-This is pick #{pick_number}. Choose ONE player from the available list.
-Respond with ONLY the exact player name, nothing else."""
+Pick exactly ONE player from the available list above.
+Consider your positional needs and your strategy.
+Respond with ONLY the player's exact full name, nothing else."""
 
     message = client.messages.create(
         model="claude-sonnet-4-6",
@@ -66,15 +130,19 @@ Respond with ONLY the exact player name, nothing else."""
     return message.content[0].text.strip()
 
 def find_player_by_name(name, available_players):
-    """Find a player in available pool by name"""
-    name_lower = name.lower()
+    """Find a player by name with fuzzy matching"""
+    name_lower = name.lower().strip()
+    
+    # Exact match first
     for player_id, player in available_players.items():
         if player['name'].lower() == name_lower:
             return player_id, player
-    # Fuzzy match - check if name is contained
+    
+    # Partial match
     for player_id, player in available_players.items():
         if name_lower in player['name'].lower() or player['name'].lower() in name_lower:
             return player_id, player
+    
     return None, None
 
 def run_draft():
@@ -82,67 +150,15 @@ def run_draft():
     all_players = get_nfl_players()
     available_players = dict(all_players)
     
-    # Initialize rosters
     rosters = {i: [] for i in range(NUM_TEAMS)}
     draft_results = []
     
-    # Generate snake order
     pick_order = snake_draft_order(NUM_TEAMS, ROSTER_SLOTS)
     
-    print(f"\n🏈 Starting snake draft - {NUM_TEAMS} teams, {ROSTER_SLOTS} rounds")
+    print(f"\n🏈 FF AGENTIC LEAGUE - SNAKE DRAFT")
+    print(f"4 Teams | 14 Rounds | PPR Scoring | Standard Waivers")
     print("=" * 60)
     
     for pick_num, team_idx in enumerate(pick_order):
         agent = AGENTS[team_idx]
         round_num = pick_num // NUM_TEAMS + 1
-        pick_in_round = pick_num % NUM_TEAMS + 1
-        
-        print(f"\nRound {round_num}, Pick {pick_in_round} - {agent['name']} is picking...")
-        
-        # Get Claude's pick
-        picked_name = agent_pick(
-            agent, 
-            available_players, 
-            rosters[team_idx],
-            pick_num + 1
-        )
-        
-        print(f"  Claude chose: {picked_name}")
-        
-        # Find and remove player from available pool
-        player_id, player = find_player_by_name(picked_name, available_players)
-        
-        if player:
-            rosters[team_idx].append(player)
-            del available_players[player_id]
-            print(f"  ✅ {agent['name']} drafts {player['name']} ({player['position']} - {player['team']})")
-            draft_results.append({
-                "round": round_num,
-                "pick": pick_in_round,
-                "overall": pick_num + 1,
-                "team": agent['name'],
-                "player": player['name'],
-                "position": player['position'],
-                "team_abbr": player['team']
-            })
-        else:
-            print(f"  ⚠️ Could not find '{picked_name}' - skipping pick")
-    
-    # Save results
-    with open("draft_results.json", "w") as f:
-        json.dump({"draft": draft_results, "rosters": {
-            AGENTS[i]['name']: rosters[i] for i in range(NUM_TEAMS)
-        }}, f, indent=2)
-    
-    print("\n" + "=" * 60)
-    print("🏆 DRAFT COMPLETE!")
-    print("\nFinal Rosters:")
-    for i, agent in enumerate(AGENTS):
-        print(f"\n{agent['name']}:")
-        for player in rosters[i]:
-            print(f"  {player['position']} - {player['name']} ({player['team']})")
-    
-    print("\nResults saved to draft_results.json")
-
-if __name__ == "__main__":
-    run_draft()
