@@ -683,13 +683,66 @@
         `).join('');
     }
 
+    f    let currentWeek = 1;
+    const TOTAL_WEEKS = 18;
+
     function loadMatchups() {
+        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/schedule.json')
+            .then(r => r.json())
+            .then(data => renderMatchups(data, currentWeek))
+            .catch(() => {
+                document.getElementById('matchupsGrid').innerHTML = 
+                    '<div class="empty" style="grid-column:span 2">Schedule not available yet</div>';
+            });
+    }
+
+    function renderMatchups(data, week) {
+        const weekData = data.schedule.find(w => w.week === week);
+        if (!weekData) return;
+
         const grid = document.getElementById('matchupsGrid');
-        grid.innerHTML = `
-            <div class="empty" style="grid-column:span 2">
-                Matchups will appear here once the season starts
+        
+        // Week navigation header
+        const navHtml = `
+            <div style="grid-column:span 2; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;">← Prev</button>
+                <span style="font-size:18px;font-weight:700;color:#58a6ff;">Week ${week}</span>
+                <button onclick="changeWeek(1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;">Next →</button>
             </div>
         `;
+
+        const matchupsHtml = weekData.matchups.map(m => `
+            <div class="matchup-card">
+                <div class="matchup-week">Week ${week} · ${m.completed ? 'Final' : 'Upcoming'}</div>
+                <div class="matchup-teams">
+                    <div class="matchup-team">
+                        <div class="matchup-team-name">${m.home.name}</div>
+                        <div class="matchup-owner">${m.home.owner}</div>
+                        ${m.home_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.home_projected.toFixed(1)}</div>` : ''}
+                        ${m.home_score > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">Actual: ${m.home_score.toFixed(1)}</div>` : ''}
+                    </div>
+                    <div class="matchup-score">
+                        ${m.home_score > 0 || m.away_score > 0 
+                            ? `${m.home_score.toFixed(1)}<br><span style="font-size:12px;color:#8b949e">vs</span><br>${m.away_score.toFixed(1)}`
+                            : '<span style="font-size:14px;color:#8b949e">vs</span>'
+                        }
+                    </div>
+                    <div class="matchup-team">
+                        <div class="matchup-team-name">${m.away.name}</div>
+                        <div class="matchup-owner">${m.away.owner}</div>
+                        ${m.away_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.away_projected.toFixed(1)}</div>` : ''}
+                        ${m.away_score > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">Actual: ${m.away_score.toFixed(1)}</div>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        grid.innerHTML = navHtml + matchupsHtml;
+    }
+
+    function changeWeek(direction) {
+        currentWeek = Math.max(1, Math.min(TOTAL_WEEKS, currentWeek + direction));
+        loadMatchups();
     }
 
     function loadTrades() {
