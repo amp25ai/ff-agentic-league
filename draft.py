@@ -5,6 +5,20 @@ from players import get_nfl_players
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
+def draft_already_completed():
+    """Check if draft has already been run"""
+    if not os.path.exists("league.db"):
+        return False
+    try:
+        conn = sqlite3.connect("league.db")
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM players WHERE team_id IS NOT NULL")
+        count = c.fetchone()[0]
+        conn.close()
+        return count > 0
+    except:
+        return False
+
 # League settings
 NUM_TEAMS = 4
 ROSTER_SLOTS = 14  # 1 QB, 2 RB, 2 WR, 1 TE, 1 FLEX, 1 K, 6 bench
