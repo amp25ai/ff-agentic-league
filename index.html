@@ -128,6 +128,11 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
         }
+                @media (max-width: 768px) {
+            .matchups-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
 
         .matchup-card {
             background: #21262d;
@@ -713,7 +718,7 @@
         
         // Week navigation header
         const navHtml = `
-            <div style="grid-column:span 2; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <div style="grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
                 <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">← Prev</button>
                 <div style="text-align:center;">
                     <div style="font-size:18px;font-weight:700;color:#58a6ff;">Week ${week}</div>
@@ -724,7 +729,7 @@
         `;
 
         const matchupsHtml = weekData.matchups.map(m => `
-            <div class="matchup-card">
+            <div class="matchup-card" style="width:100%;box-sizing:border-box;">
                 <div class="matchup-week">Week ${week} · ${m.completed ? 'Final' : 'Upcoming'}</div>
                 <div class="matchup-teams">
                     <div class="matchup-team">
