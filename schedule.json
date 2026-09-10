@@ -1,0 +1,743 @@
+{
+  "total_weeks": 18,
+  "schedule": [
+    {
+      "week": 1,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 8,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 9,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 10,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 11,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 12,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 13,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 14,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 15,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 16,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 17,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    },
+    {
+      "week": 18,
+      "matchups": [
+        {
+          "matchup": 1,
+          "home": {
+            "id": 1,
+            "name": "Team Ched",
+            "owner": "Ched"
+          },
+          "away": {
+            "id": 4,
+            "name": "Team Mert",
+            "owner": "Mert"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        },
+        {
+          "matchup": 2,
+          "home": {
+            "id": 2,
+            "name": "Team JPI",
+            "owner": "JPI"
+          },
+          "away": {
+            "id": 3,
+            "name": "Team Naesh",
+            "owner": "Naesh"
+          },
+          "home_score": 0,
+          "away_score": 0,
+          "home_projected": 0,
+          "away_projected": 0,
+          "completed": false
+        }
+      ]
+    }
+  ]
+}

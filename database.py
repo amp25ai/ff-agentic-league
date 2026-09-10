@@ -75,6 +75,7 @@ def create_tables():
             player_id TEXT,
             team_id INTEGER,
             points REAL DEFAULT 0,
+            projected_points REAL DEFAULT 0,
             is_starter INTEGER DEFAULT 0,
             FOREIGN KEY (player_id) REFERENCES players(id),
             FOREIGN KEY (team_id) REFERENCES teams(id)
