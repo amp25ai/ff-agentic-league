@@ -380,6 +380,15 @@
             /* Matchups - single column */
             .matchups-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .matchup-card {
+                width: 100%;
+            }
+
+            .matchup-team-name {
+                font-size: 12px;
             }
 
             .matchup-score {
@@ -705,9 +714,12 @@
         // Week navigation header
         const navHtml = `
             <div style="grid-column:span 2; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-                <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;">← Prev</button>
-                <span style="font-size:18px;font-weight:700;color:#58a6ff;">Week ${week}</span>
-                <button onclick="changeWeek(1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;">Next →</button>
+                <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">← Prev</button>
+                <div style="text-align:center;">
+                    <div style="font-size:18px;font-weight:700;color:#58a6ff;">Week ${week}</div>
+                    <button onclick="goToCurrentWeek()" style="background:none;border:none;color:#8b949e;font-size:11px;cursor:pointer;margin-top:4px;">↩ Current Week</button>
+                </div>
+                <button onclick="changeWeek(1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">Next →</button>
             </div>
         `;
 
@@ -744,6 +756,12 @@
         currentWeek = Math.max(1, Math.min(TOTAL_WEEKS, currentWeek + direction));
         loadMatchups();
     }
+    
+    function goToCurrentWeek() {
+        currentWeek = 1; // Update this to current NFL week once season starts
+        loadMatchups();
+    }
+    
 
     function loadTrades() {
         const log = document.getElementById('tradeLog');
