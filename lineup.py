@@ -1,6 +1,6 @@
 import os
 import anthropic
-from database import get_db, LEAGUE_SETTINGS
+from database import get_db
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
@@ -132,7 +132,6 @@ def save_lineup(team_id, week, lineup):
         WHERE team_id = ? AND week = ?
     ''', (team_id, week))
     
-    starter_ids = [p['id'] for p in lineup.values()]
     
     for slot, player in lineup.items():
         # Insert or update weekly score entry

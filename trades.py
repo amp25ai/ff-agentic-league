@@ -180,10 +180,6 @@ def execute_trade(trade_id, proposing_team_id, receiving_team_id,
         UPDATE players SET team_id = ? WHERE id = ?
     ''', (proposing_team_id, requested_player['id']))
 
-    # Update trade status
-    c.execute('''
-        UPDATE trades SET status = 'completed' WHERE id = ?
-    ''', (trade_id,))
 
     conn.commit()
     conn.close()

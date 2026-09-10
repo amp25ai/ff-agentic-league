@@ -161,23 +161,82 @@ def find_player_by_name(name, available_players):
     return None, None
 
 def run_draft():
-        if draft_already_completed():
+    if draft_already_completed():
         print("🚫 Draft already completed - league is live!")
         print("   Delete league.db only if you want to start over.")
         return
     print("🏈 Loading NFL players...")
     all_players = get_nfl_players()
     available_players = dict(all_players)
-    
+
     rosters = {i: [] for i in range(NUM_TEAMS)}
     draft_results = []
-    
+
     pick_order = snake_draft_order(NUM_TEAMS, ROSTER_SLOTS)
-    
+
     print(f"\n🏈 FF AGENTIC LEAGUE - SNAKE DRAFT")
     print(f"4 Teams | 14 Rounds | PPR Scoring | Standard Waivers")
     print("=" * 60)
-    
+
     for pick_num, team_idx in enumerate(pick_order):
         agent = AGENTS[team_idx]
         round_num = pick_num // NUM_TEAMS + 1
+        pick_in_round = pick_num % NUM_TEAMS + 1
+
+        print(f"\nRound {round_num}, Pick {pick_in_round} | {agent['name']} ({agent['owner']}) is picking...")
+
+        picked_name = agent_pick(
+            agent,
+            available_players,
+            rosters[team_idx],
+            pick_num + 1,
+            round_num
+        )
+
+        print(f"  → Claude chose: {picked_name}")
+
+        player_id, player = find_player_by_name(picked_name, available_players)
+
+        if player:
+            rosters[team_idx].append(player)
+            del available_players[player_id]
+            print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
+            draft_results.append({
+                "round": round_num,
+                "pick": pick_in_round,
+                "overall": pick_num + 1,
+                "team": agent['name'],
+                "owner": agent['owner'],
+                "player": player['name'],
+                "position": player['position'],
+                "nfl_team": player['team']
+            })
+        else:
+            print(f"  ⚠️ Could not find '{picked_name}' - skipping")
+
+    with open("draft_results.json", "w") as f:
+        json.dump({
+            "settings": {
+                "teams": NUM_TEAMS,
+                "rounds": ROSTER_SLOTS,
+                "scoring": "PPR",
+                "waivers": "Standard"
+            },
+            "draft": draft_results,
+            "rosters": {
+                AGENTS[i]['owner']: rosters[i] for i in range(NUM_TEAMS)
+            }
+        }, f, indent=2)
+
+    print("\n" + "=" * 60)
+    print("🏆 DRAFT COMPLETE!")
+    print("\nFinal Rosters:")
+    for i, agent in enumerate(AGENTS):
+        print(f"\n{agent['owner']} ({agent['name']}):")
+        for player in rosters[i]:
+            print(f"  {player['position']} - {player['name']} ({player['team']})")
+
+    print("\n✅ Results saved to draft_results.json")
+
+if __name__ == "__main__":
+    run_draft()

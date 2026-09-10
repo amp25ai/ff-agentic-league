@@ -1,12 +1,10 @@
 import os
 import sys
-import anthropic
 from database import get_db, get_standings, print_standings
 from lineup import set_all_lineups
 from waivers import run_waivers
 from trades import run_trades
 
-client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 TOTAL_WEEKS = 18
 
