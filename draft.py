@@ -1,5 +1,6 @@
 import json
 import os
+import sqlite3
 import anthropic
 from players import get_nfl_players
 
@@ -160,6 +161,10 @@ def find_player_by_name(name, available_players):
     return None, None
 
 def run_draft():
+        if draft_already_completed():
+        print("🚫 Draft already completed - league is live!")
+        print("   Delete league.db only if you want to start over.")
+        return
     print("🏈 Loading NFL players...")
     all_players = get_nfl_players()
     available_players = dict(all_players)
