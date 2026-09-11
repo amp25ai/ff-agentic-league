@@ -924,7 +924,12 @@
             .then(r => r.json())
             .catch(() => ({ trades: [] }));
 
-        Promise.all([draftPromise, tradesPromise]).then(([draftData, tradesData]) => {
+        // Load waivers from API
+        const waiversPromise = fetch(`${API_BASE}/api/waivers`)
+            .then(r => r.json())
+            .catch(() => ({ waivers: [] }));
+
+        Promise.all([draftPromise, tradesPromise, waiversPromise]).then(([draftData, tradesData, waiversData]) => {
             const transactions = [];
 
             // Add draft picks
@@ -956,6 +961,28 @@
                             owner: trade.proposing_owner,
                             description: `🔀 Trade: ${trade.proposing_team} ↔ ${trade.receiving_team}`,
                             icon: '🔀'
+                        });
+                    }
+                });
+            }
+                        // Add waiver moves
+            if (waiversData && waiversData.waivers) {
+                waiversData.waivers.forEach(w => {
+                    if (w.status === 'completed') {
+                        const desc = w.add_player && w.drop_player
+                            ? `➕ ${w.owner} added ${w.add_player}, dropped ${w.drop_player}`
+                            : w.add_player
+                            ? `➕ ${w.owner} added ${w.add_player}`
+                            : `➖ ${w.owner} dropped ${w.drop_player}`;
+                        transactions.push({
+                            type: 'waiver',
+                            week: w.week,
+                            date: `Week ${w.week}`,
+                            time: 'Waiver',
+                            team: w.owner,
+                            owner: w.owner,
+                            description: desc,
+                            icon: '➕'
                         });
                     }
                 });
