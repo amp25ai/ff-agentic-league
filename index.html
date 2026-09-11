@@ -702,7 +702,7 @@
     const TOTAL_WEEKS = 18;
     const API_BASE = window.location.hostname === 'localhost' 
         ? 'http://localhost:8000' 
-        : 'https://your-railway-url.railway.app';
+        : 'https://web-production-bd0f5e.up.railway.app';
 
     function loadMatchups() {
         fetch(`${API_BASE}/api/matchup/${currentWeek}`)
