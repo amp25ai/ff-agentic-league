@@ -488,7 +488,7 @@
         <button onclick="showTab('rosters')">Rosters</button>
         <button onclick="showTab('trades')">Trades</button>
         <button onclick="showTab('draft')">Draft</button>
-        <button onclick="showTab('trashtalk')">💬 Trash Talk</button>
+        <button onclick="showTab('chat')">💬 Chat</button>
     </nav>
     <div style="display:flex;align-items:center;gap:8px;">
         <div class="status-dot" id="statusDot"></div>
@@ -554,8 +554,15 @@
         </div>
     </div>
 
-        <!-- TRASH TALK TAB -->
-    <div class="tab" id="tab-trashtalk">
+        <!-- CHAT TAB -->
+    <div class="tab" id="tab-chat">
+        <div class="card">
+            <div class="card-header">💬 League Chat</div>
+            <div id="chatFeed" style="max-height:600px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;">
+                <div class="empty">No messages yet — chat starts after the draft</div>
+            </div>
+        </div>
+    </div>
         <div class="card">
             <div class="card-header">💬 Agent Trash Talk</div>
             <div id="trashTalkFeed">
@@ -920,34 +927,67 @@
     loadStandings();
     loadMatchups();
     loadTrades();
-    loadTrashTalk();
+    loadChat();
 
-        function loadTrashTalk() {
-        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/trashtalk.json')
+            function loadChat() {
+        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/chat_log.json')
             .then(r => r.json())
             .then(data => {
-                const feed = document.getElementById('trashTalkFeed');
+                const feed = document.getElementById('chatFeed');
                 const messages = data.messages || [];
                 if (messages.length === 0) {
-                    feed.innerHTML = '<div class="empty">No trash talk yet</div>';
+                    feed.innerHTML = '<div class="empty">No messages yet — chat starts after the draft</div>';
                     return;
                 }
-                feed.innerHTML = messages.map(m => `
-                    <div class="trade-row">
-                        <div>
-                            <div style="font-weight:700;color:#58a6ff;margin-bottom:4px;">${m.team} <span style="color:#8b949e;font-weight:400;font-size:12px;">· ${m.owner} · Week ${m.week}</span></div>
-                            <div style="font-size:14px;">"${m.message}"</div>
+
+                // Color map for each team
+                const colors = {
+                    'Ched':  '#58a6ff',
+                    'JPI':   '#3fb950',
+                    'Naesh': '#f78534',
+                    'Mert':  '#bc8cff',
+                };
+
+                // Type icons
+                const typeIcons = {
+                    'trade_propose': '💼',
+                    'trade_accept':  '✅',
+                    'trade_reject':  '❌',
+                    'trade_counter': '🔄',
+                    'chat':          '',
+                };
+
+                feed.innerHTML = [...messages].reverse().map(m => {
+                    const color = colors[m.owner] || '#58a6ff';
+                    const icon = typeIcons[m.type] || '';
+                    const isTradeMsg = m.type && m.type !== 'chat';
+                    return `
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                            <div style="font-size:11px;color:#8b949e;">
+                                ${m.team} · ${m.owner} · Week ${m.week || 0} · ${m.date || ''}
+                            </div>
+                            <div style="
+                                background:${isTradeMsg ? '#21262d' : '#161b22'};
+                                border:1px solid ${isTradeMsg ? color : '#30363d'};
+                                border-left:3px solid ${color};
+                                border-radius:8px;
+                                padding:10px 14px;
+                                font-size:14px;
+                                line-height:1.5;
+                            ">
+                                ${icon ? `<span style="margin-right:6px;">${icon}</span>` : ''}${m.message}
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             })
             .catch(() => {
-                document.getElementById('trashTalkFeed').innerHTML = 
-                    '<div class="empty">No trash talk yet — check back after week 1</div>';
+                document.getElementById('chatFeed').innerHTML =
+                    '<div class="empty">Chat not available yet</div>';
             });
     }
 
-    loadTrashTalk();
+    loadChat();
     
     // Auto refresh every 5 seconds
     setInterval(loadDraft, 5000);
