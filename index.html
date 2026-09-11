@@ -513,8 +513,24 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- NEWSLETTER SECTION -->
+        <div class="card" style="margin-top:20px;">
+            <div class="card-header">📰 League Newsletter</div>
+            <div style="padding:0;">
+                <!-- Newsletter tabs -->
+                <div id="newsletterTabs" style="display:flex;flex-direction:row-reverse;overflow-x:auto;padding:12px 16px;gap:8px;border-bottom:1px solid #30363d;scrollbar-width:none;">
+                </div>
+                <!-- Newsletter content -->
+                <div id="newsletterContent" style="padding:20px;font-size:14px;line-height:1.7;color:#e6edf3;max-height:600px;overflow-y:auto;">
+                    <div class="empty">Loading newsletter...</div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- MATCHUPS TAB -->
+    
     <!-- MATCHUPS TAB -->
     <div class="tab" id="tab-matchups">
         <div class="card">
@@ -596,6 +612,96 @@
             losses: 0,
             points: 0
         }));
+
+     let currentNewsletter = null;
+
+    function loadNewsletters() {
+        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/newsletters.json')
+            .then(r => r.json())
+            .then(data => renderNewsletters(data.newsletters || []))
+            .catch(() => {
+                document.getElementById('newsletterContent').innerHTML =
+                    '<div class="empty">No newsletters yet</div>';
+            });
+    }
+
+    function renderNewsletters(newsletters) {
+        if (!newsletters.length) {
+            document.getElementById('newsletterContent').innerHTML =
+                '<div class="empty">No newsletters yet</div>';
+            return;
+        }
+
+        // Sort: newest first (left), oldest last (right)
+        // Since tabs are row-reverse, we add in chronological order
+        const sorted = [...newsletters].sort((a, b) => a.week - b.week);
+
+        const tabs = document.getElementById('newsletterTabs');
+        tabs.innerHTML = sorted.map((n, i) => `
+            <button onclick="showNewsletter('${n.id}')"
+                id="ntab-${n.id}"
+                style="
+                    white-space:nowrap;
+                    padding:6px 14px;
+                    border-radius:20px;
+                    border:1px solid #30363d;
+                    background:#21262d;
+                    color:#8b949e;
+                    cursor:pointer;
+                    font-size:12px;
+                    flex-shrink:0;
+                ">
+                ${n.title}
+            </button>
+        `).join('');
+
+        // Auto-select most recent (first in row-reverse = rightmost visually = newest)
+        const newest = sorted[sorted.length - 1];
+        showNewsletter(newest.id, newsletters);
+    }
+
+    function showNewsletter(id, newsletters) {
+        // Load from cache or re-fetch
+        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/newsletters.json')
+            .then(r => r.json())
+            .then(data => {
+                const newsletters = data.newsletters || [];
+                const newsletter = newsletters.find(n => n.id === id);
+                if (!newsletter) return;
+
+                currentNewsletter = id;
+
+                // Update tab styles
+                document.querySelectorAll('[id^="ntab-"]').forEach(btn => {
+                    btn.style.background = '#21262d';
+                    btn.style.color = '#8b949e';
+                    btn.style.borderColor = '#30363d';
+                });
+                const activeTab = document.getElementById(`ntab-${id}`);
+                if (activeTab) {
+                    activeTab.style.background = '#58a6ff';
+                    activeTab.style.color = 'white';
+                    activeTab.style.borderColor = '#58a6ff';
+                }
+
+                // Render content with basic markdown
+                const content = newsletter.content
+                    .replace(/^## (.+)$/gm, '<h2 style="color:#58a6ff;margin:16px 0 8px;font-size:16px;">$1</h2>')
+                    .replace(/^### (.+)$/gm, '<h3 style="color:#8b949e;margin:12px 0 6px;font-size:14px;">$1</h3>')
+                    .replace(/^# (.+)$/gm, '<h1 style="color:#e6edf3;margin:16px 0 8px;font-size:18px;font-weight:800;">$1</h1>')
+                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                    .replace(/^---$/gm, '<hr style="border-color:#30363d;margin:16px 0;">')
+                    .replace(/\n/g, '<br>');
+
+                document.getElementById('newsletterContent').innerHTML = `
+                    <div style="font-size:11px;color:#8b949e;margin-bottom:12px;">${newsletter.date}</div>
+                    ${content}
+                `;
+            });
+    }
+
+    loadNewsletters();       
 
         body.innerHTML = teams.map((t, i) => `
             <tr>
