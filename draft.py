@@ -307,6 +307,10 @@ def run_draft():
                 pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1
 
                 print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
+                #Auto-push after every complete round so dashboard updates live
+                if pick_num % NUM_TEAMS == (NUM_TEAMS - 1):
+                    os.system(f'git add draft_results.json && git commit -m "Draft: Round {round_num} complete" && git push 2>/dev/null')
+                    print(f"  📤 Round {round_num} pushed to GitHub")
                 draft_results.append({
                 "round": round_num,
                 "pick": pick_in_round,
