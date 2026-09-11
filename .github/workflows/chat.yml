@@ -2,24 +2,24 @@ name: Daily League Chat
 
 on:
   schedule:
-    - cron: '0 13 * * *'   # 8am ET (1pm UTC) — morning session
-    - cron: '0 17 * * *'   # 12pm ET (5pm UTC) — midday session
-    - cron: '0 21 * * *'   # 4pm ET (9pm UTC) — afternoon session
-    - cron: '0 1 * * *'    # 8pm ET (1am UTC next day) — evening session
-  workflow_dispatch:         # Allow manual trigger from GitHub
+    - cron: '0 13 * * *'   # 8am ET morning session
+    - cron: '0 17 * * *'   # 12pm ET midday session
+    - cron: '0 21 * * *'   # 4pm ET afternoon session
+    - cron: '0 1 * * *'    # 8pm ET evening session
+  workflow_dispatch:
 
 jobs:
   chat:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -50,5 +50,5 @@ jobs:
           git config user.name "FF Agent Bot"
           git config user.email "bot@ffagent.com"
           git add chat_log.json
-          git diff --staged --quiet || git commit -m "Chat update: ${{ steps.session.outputs.session }} session"
+          git diff --staged --quiet || git commit -m "Chat: ${{ steps.session.outputs.session }}"
           git push
