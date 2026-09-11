@@ -28,6 +28,70 @@ def load_strategy(filename):
     except FileNotFoundError:
         return "Compete to win the fantasy league."
 
+def get_agent_personality(owner):
+    """
+    Determine an agent's current personality based on their record.
+    Returns a personality modifier string to inject into the chat prompt.
+    Financial parallel: Market sentiment shifts based on recent performance.
+    """
+    try:
+        with open("standings.json") as f:
+            data = json.load(f)
+        standings = data.get("standings", [])
+    except:
+        return ""
+
+    if not standings:
+        return ""
+
+    # Find this agent's standing
+    team = next((s for s in standings if s["owner"] == owner), None)
+    if not team:
+        return ""
+
+    wins = team.get("wins", 0)
+    losses = team.get("losses", 0)
+    total_games = wins + losses
+    rank = standings.index(team) + 1
+    total_teams = len(standings)
+
+    if total_games == 0:
+        return "The season just started — you're optimistic and confident heading in."
+
+    win_pct = wins / total_games
+
+    # Determine personality based on record and rank
+    if rank == 1 and wins >= 3:
+        return ("You are in FIRST PLACE and dominant. You are confident, dismissive of "
+                "competition, and back everything up with data. You talk like you've already won.")
+
+    elif rank == total_teams and losses >= 3:
+        return ("You are in LAST PLACE. You are either desperately trying to spin your "
+                "losses as bad luck/variance, or you've gone quiet and are plotting a comeback. "
+                "You're defensive when challenged but still believe in your strategy.")
+
+    elif wins >= 2 and losses == 0:
+        return ("You're UNDEFEATED and riding high. You're cocky but not obnoxious — "
+                "you let your record speak and casually drop stats to back up your confidence.")
+
+    elif losses >= 2 and wins == 0:
+        return ("You're WINLESS and frustrated. You blame injuries, bad luck, and opponent "
+                "schedules. You still believe your roster is better than your record shows. "
+                "You're a little salty in the chat.")
+
+    elif win_pct > 0.65:
+        return ("You're having a GREAT season. You're upbeat, confident, and generous "
+                "with your analysis. You occasionally gloat but keep it classy.")
+
+    elif win_pct < 0.35:
+        return ("You're having a TOUGH season. You're searching for answers, questioning "
+                "your agent's decisions, and either deflecting blame or owning it depending "
+                "on your personality.")
+
+    else:
+        return ("You're in the MIDDLE OF THE PACK — competitive but not dominant. "
+                "You're hungry to separate yourself and talk up your upcoming schedule.")
+
 def load_chat_log():
     if os.path.exists(CHAT_LOG_FILE):
         with open(CHAT_LOG_FILE) as f:
@@ -332,9 +396,12 @@ TRADE_REJECT: if you decline
 TRADE_COUNTER: if you want to counter
 """
 
+        personality = get_agent_personality(agent['owner'])
         prompt = f"""You are {agent['owner']} in a fantasy football group chat. Session vibe: {session_tone} with {', '.join([a['owner'] for a in AGENTS if a['owner'] != agent['owner']])}.
 
 Your strategy personality: {strategy}
+
+Your current mood based on your record: {personality}
 
 Week {week} standings:
 {standings_str}
