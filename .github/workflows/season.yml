@@ -147,7 +147,9 @@ jobs:
           else:
               print('Season not started yet')
           "
-
+      - name: Update percentile rankings (Tuesday)
+        if: steps.task.outputs.task == 'scores' || steps.task.outputs.task == 'all'
+        run: python3 percentile.py
       - name: Sync database to JSON
         run: python3 sync_db.py
 
