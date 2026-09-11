@@ -55,10 +55,21 @@ def fetch_nfl_state():
     r = requests.get(url, timeout=10)
     return r.json() if r.status_code == 200 else {"week": 1, "season": "2026"}
 
-def get_roster_by_owner(owner, draft_results):
-    """Get a team's roster from draft results"""
-    rosters = draft_results.get("rosters", {})
-    return rosters.get(owner, [])
+def get_roster_by_owner(owner, draft_results=None):
+    """Get a team's roster — from rosters.json if available, else draft_results"""
+    try:
+        with open("rosters.json") as f:
+            data = json.load(f)
+        for team in data.get("rosters", []):
+            if team["owner"] == owner:
+                return team["players"]
+    except:
+        pass
+    # Fallback to draft results
+    if draft_results:
+        rosters = draft_results.get("rosters", {})
+        return rosters.get(owner, [])
+    return []
 
 def score_lineup(roster, stats, projections):
     """
@@ -236,47 +247,39 @@ def get_week_matchups(week: int):
 
 @app.get("/api/standings")
 def get_standings():
-    """Get current league standings from database"""
+    """Get standings from JSON file"""
     try:
-        import sqlite3
-        conn = sqlite3.connect("league.db")
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute('''
-            SELECT name, owner, wins, losses, total_points
-            FROM teams
-            ORDER BY wins DESC, total_points DESC
-        ''')
-        standings = [dict(row) for row in c.fetchall()]
-        conn.close()
-        return {"standings": standings}
-    except Exception as e:
-        return {"standings": [], "error": str(e)}
+        with open("standings.json") as f:
+            return json.load(f)
+    except:
+        return {"standings": []}
 
 @app.get("/api/trades")
 def get_trades():
-    """Get trade history from database"""
+    """Get trades from JSON file"""
     try:
-        import sqlite3
-        conn = sqlite3.connect("league.db")
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute('''
-            SELECT t.week, t.status,
-                   t1.name as proposing_team, t1.owner as proposing_owner,
-                   t2.name as receiving_team, t2.owner as receiving_owner,
-                   t.players_offered, t.players_requested
-            FROM trades t
-            JOIN teams t1 ON t.proposing_team_id = t1.id
-            JOIN teams t2 ON t.receiving_team_id = t2.id
-            ORDER BY t.id DESC
-            LIMIT 20
-        ''')
-        trades = [dict(row) for row in c.fetchall()]
-        conn.close()
-        return {"trades": trades}
-    except Exception as e:
-        return {"trades": [], "error": str(e)}
+        with open("trades.json") as f:
+            return json.load(f)
+    except:
+        return {"trades": []}
+
+@app.get("/api/rosters")
+def get_rosters():
+    """Get current rosters from JSON file"""
+    try:
+        with open("rosters.json") as f:
+            return json.load(f)
+    except:
+        return {"rosters": []}
+
+@app.get("/api/waivers")
+def get_waivers():
+    """Get waiver history from JSON file"""
+    try:
+        with open("waivers.json") as f:
+            return json.load(f)
+    except:
+        return {"waivers": []}
 
 # Serve the dashboard
 @app.get("/")
