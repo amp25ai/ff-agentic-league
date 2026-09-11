@@ -140,6 +140,9 @@ jobs:
         run: |
           echo "Newsletter generation - coming soon"
 
+      - name: Sync database to JSON
+        run: python3 sync_db.py
+
       - name: Commit and push all changes
         run: |
           git config user.name "FF Season Bot"
