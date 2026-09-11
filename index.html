@@ -486,13 +486,9 @@
         <button class="active" onclick="showTab('standings')">Standings</button>
         <button onclick="showTab('matchups')">Matchups</button>
         <button onclick="showTab('trades')">Trades</button>
-        <button onclick="showTab('draft')">Draft</button>
         <button onclick="showTab('chat')">💬 Chat</button>
     </nav>
-    <div style="display:flex;align-items:center;gap:8px;">
-        <div class="status-dot" id="statusDot"></div>
-        <span id="statusText" style="font-size:13px;color:#8b949e;">Loading...</span>
-    </div>
+    
 </header>
 
 <div class="container">
@@ -550,33 +546,6 @@
             </div>
         </div>
     </div>
-        
-    <!-- DRAFT TAB -->
-    <div class="tab" id="tab-draft">
-        <div class="draft-banner" id="draftBanner">
-            <div class="draft-stat">
-                <div class="label">Current Pick</div>
-                <div class="value" id="pickNum">—</div>
-            </div>
-            <div class="divider"></div>
-            <div class="draft-stat">
-                <div class="label">Round</div>
-                <div class="value" id="roundNum">—</div>
-            </div>
-            <div class="divider"></div>
-            <div class="draft-stat">
-                <div class="label">On The Clock</div>
-                <div class="value" id="onClock">Waiting...</div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">📋 Draft Log</div>
-            <div id="draftLog" style="max-height:500px;overflow-y:auto;">
-                <div class="empty">Draft hasn't started yet</div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -589,49 +558,6 @@
         document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
         document.getElementById('tab-' + name).classList.add('active');
         event.target.classList.add('active');
-    }
-
-    // Load draft results
-    function loadDraft() {
-        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/draft_results.json')
-            .then(r => r.json())
-            .then(data => {
-                const picks = data.draft || [];
-                const rosters = data.rosters || {};
-                const total = 4 * 14;
-                const done = picks.length >= total;
-
-                document.getElementById('statusText').textContent = 
-                    done ? 'Draft Complete' : `Pick ${picks.length} of ${total}`;
-
-                if (picks.length > 0) {
-                    const last = picks[picks.length - 1];
-                    document.getElementById('pickNum').textContent = done ? total : last.overall + 1;
-                    document.getElementById('roundNum').textContent = last.round;
-                    document.getElementById('onClock').textContent = done ? '🏆 Complete!' : '...picking';
-                }
-
-                // Draft log
-                const log = document.getElementById('draftLog');
-                if (picks.length === 0) {
-                    log.innerHTML = '<div class="empty">Draft hasn\'t started yet<br><small>Run python3 draft.py to begin</small></div>';
-                } else {
-                    log.innerHTML = [...picks].reverse().map(p => `
-                        <div class="log-entry">
-                            <span class="log-pick">Rd ${p.round}, Pk ${p.pick}</span>
-                            <span class="log-team">${p.team}</span>
-                            <span class="log-player">${p.player}</span>
-                            <span class="log-pos">${p.position} · ${p.nfl_team || 'FA'}</span>
-                        </div>
-                    `).join('');
-                }
-
-                // Rosters from draft
-                loadRosters(rosters);
-            })
-            .catch(() => {
-                document.getElementById('statusText').textContent = 'No draft data';
-            });
     }
 
     function loadRosters(rosters) {
@@ -978,16 +904,135 @@
         .catch(() => loadMatchups());
     
 
-    function loadTrades() {
-        const log = document.getElementById('tradeLog');
-        log.innerHTML = '<div class="empty">No trades yet — check back during the season</div>';
+        let transactionPage = 0;
+    const TRANSACTIONS_PER_PAGE = 50;
+
+    function loadTransactions() {
+        // Load draft picks from draft_results.json
+        const draftPromise = fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/draft_results.json')
+            .then(r => r.json())
+            .catch(() => null);
+
+        // Load trades from API
+        const tradesPromise = fetch(`${API_BASE}/api/trades`)
+            .then(r => r.json())
+            .catch(() => ({ trades: [] }));
+
+        Promise.all([draftPromise, tradesPromise]).then(([draftData, tradesData]) => {
+            const transactions = [];
+
+            // Add draft picks
+            if (draftData && draftData.draft) {
+                draftData.draft.forEach(pick => {
+                    transactions.push({
+                        type: 'draft',
+                        week: 0,
+                        date: 'Draft Day',
+                        time: `Rd ${pick.round}, Pk ${pick.pick}`,
+                        team: pick.team,
+                        owner: pick.owner,
+                        description: `Drafted ${pick.player} (${pick.position} · ${pick.nfl_team || 'FA'})`,
+                        icon: '📋'
+                    });
+                });
+            }
+
+            // Add trades
+            if (tradesData && tradesData.trades) {
+                tradesData.trades.forEach(trade => {
+                    if (trade.status === 'completed') {
+                        transactions.push({
+                            type: 'trade',
+                            week: trade.week,
+                            date: `Week ${trade.week}`,
+                            time: 'Trade',
+                            team: trade.proposing_team,
+                            owner: trade.proposing_owner,
+                            description: `🔀 Trade: ${trade.proposing_team} ↔ ${trade.receiving_team}`,
+                            icon: '🔀'
+                        });
+                    }
+                });
+            }
+
+            // Sort: draft picks first (oldest), then by week
+            transactions.sort((a, b) => {
+                if (a.type === 'draft' && b.type !== 'draft') return -1;
+                if (a.type !== 'draft' && b.type === 'draft') return 1;
+                return (a.week || 0) - (b.week || 0);
+            });
+
+            renderTransactions(transactions);
+        });
+    }
+
+    function renderTransactions(transactions) {
+        const feed = document.getElementById('transactionsFeed');
+        if (!transactions.length) {
+            feed.innerHTML = '<div class="empty">No transactions yet</div>';
+            return;
+        }
+
+        const totalPages = Math.ceil(transactions.length / TRANSACTIONS_PER_PAGE);
+        const start = transactionPage * TRANSACTIONS_PER_PAGE;
+        const end = start + TRANSACTIONS_PER_PAGE;
+        const paginated = transactions.slice(start, end);
+
+        // Color map
+        const colors = {
+            'Ched':  '#58a6ff',
+            'JPI':   '#3fb950',
+            'Naesh': '#f78534',
+            'Mert':  '#bc8cff',
+        };
+
+        const typeColors = {
+            'draft': '#30363d',
+            'trade': '#388bfd22',
+            'waiver': '#3fb95022',
+        };
+
+        const entries = paginated.map(t => {
+            const color = colors[t.owner] || '#58a6ff';
+            const bg = typeColors[t.type] || '#30363d';
+            return `
+                <div style="display:flex;flex-direction:column;gap:4px;padding:12px 16px;border-bottom:1px solid #21262d;">
+                    <div style="font-size:11px;color:#8b949e;">${t.date} · ${t.time} · ${t.team}</div>
+                    <div style="
+                        background:${bg};
+                        border-left:3px solid ${color};
+                        border-radius:6px;
+                        padding:8px 12px;
+                        font-size:13px;
+                    ">
+                        ${t.icon} ${t.description}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const pagination = totalPages > 1 ? `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #30363d;">
+                <button onclick="changeTransactionPage(-1)" ${transactionPage === 0 ? 'disabled' : ''} 
+                    style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;opacity:${transactionPage === 0 ? '0.4' : '1'}">← Prev</button>
+                <span style="font-size:12px;color:#8b949e;">Page ${transactionPage + 1} of ${totalPages}</span>
+                <button onclick="changeTransactionPage(1)" ${transactionPage >= totalPages - 1 ? 'disabled' : ''}
+                    style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;opacity:${transactionPage >= totalPages - 1 ? '0.4' : '1'}">Next →</button>
+            </div>
+        ` : '';
+
+        feed.innerHTML = entries + pagination;
+    }
+
+    function changeTransactionPage(dir) {
+        transactionPage = Math.max(0, transactionPage + dir);
+        loadTransactions();
     }
 
     // Initialize
-    loadDraft();
     loadStandings();
     loadMatchups();
-    loadTrades();
+    loadTransactions();
     loadChat();
 
             function loadChat() {
@@ -1049,10 +1094,3 @@
     }
 
     loadChat();
-
-    // Auto refresh every 5 seconds
-    setInterval(loadDraft, 5000);
-</script>
-
-</body>
-</html>
