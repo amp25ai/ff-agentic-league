@@ -3,6 +3,8 @@ import anthropic
 from database import get_db
 from lineup import get_team_strategy
 
+from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_all_players
+
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 def get_free_agents(team_id):
@@ -32,30 +34,65 @@ def get_team_roster(team_id):
     conn.close()
     return players
 
-def ask_claude_for_waiver(team, roster, free_agents, week, strategy):
-    """Ask Claude if this team should make any waiver moves"""
+def ask_claude_for_waiver(team, roster, free_agents, week, strategy, season="2026"):
+    """Ask Claude if this team should make any waiver moves with enriched metrics"""
 
-    roster_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in roster
-    ])
+    all_players_meta = fetch_all_players()
 
-    fa_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in free_agents[:40]  # Show top 40 free agents
-    ])
+    # Build enriched roster
+    roster_lines = []
+    for p in roster:
+        pid = p['id']
+        meta = all_players_meta.get(pid, {})
+        age = meta.get("age", 0) or 0
+        years_exp = meta.get("years_exp", 0) or 0
+        season_metrics = get_season_metrics(
+            pid, meta, season, week, all_players_meta)
+        grade = grade_player_inseason(season_metrics, p['position'], age)
+        context = format_player_context(
+            p['name'], p['position'], age, years_exp,
+            season_metrics, inseason_grade=grade)
+        roster_lines.append((grade, context))
+
+    roster_lines.sort(key=lambda x: x[0], reverse=True)
+    roster_str = "\n\n".join(ctx for _, ctx in roster_lines)
+
+    # Build enriched free agents list
+    fa_lines = []
+    for p in free_agents[:30]:
+        pid = p['id']
+        meta = all_players_meta.get(pid, {})
+        age = meta.get("age", 0) or 0
+        years_exp = meta.get("years_exp", 0) or 0
+        season_metrics = get_season_metrics(
+            pid, meta, season, week, all_players_meta)
+        grade = grade_player_inseason(season_metrics, p['position'], age)
+        context = format_player_context(
+            p['name'], p['position'], age, years_exp,
+            season_metrics, inseason_grade=grade)
+        fa_lines.append((grade, context))
+
+    fa_lines.sort(key=lambda x: x[0], reverse=True)
+    fa_str = "\n\n".join(ctx for _, ctx in fa_lines[:20])
 
     prompt = f"""You are a fantasy football agent managing {team['name']} in week {week} of an 18-week PPR season.
 
 Your strategy: {strategy}
 
-Your current roster:
+Your current roster (sorted by grade):
 {roster_str}
 
-Available free agents:
+Available free agents (sorted by grade):
 {fa_str}
 
-Based on your strategy and roster needs, decide if you want to add or drop any players this week.
+WAIVER RULES:
+- ADD a free agent ONLY if their grade is higher than a player on your roster at the same position
+- ADD if a free agent shows 📈 RISING trends in snap share AND target share for 2+ weeks
+- ADD if a teammate was injured creating a clear new role
+- NEVER ADD based on one big game — look for sustained trend changes
+- DROP a player only if their grade has fallen significantly or they lost their role
+- NEVER DROP after one bad week — require 3+ weeks of declining trends
+
 You may make UP TO 2 moves. You do not have to make any moves if your roster is strong.
 
 Respond in exactly this format:
@@ -65,7 +102,7 @@ ADD: [player name or NONE]
 DROP: [player name or NONE]
 REASON: [one sentence explaining your moves]
 
-If you don't want to make any moves respond with:
+If no moves needed:
 ADD: NONE
 DROP: NONE
 ADD: NONE
@@ -79,7 +116,7 @@ REASON: Roster is strong, no moves needed."""
     )
 
     return message.content[0].text.strip()
-
+    
 def parse_waiver_moves(response, roster, free_agents):
     """Parse Claude's waiver response into actual moves"""
     lines = response.strip().split("\n")

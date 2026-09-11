@@ -4,6 +4,8 @@ import anthropic
 from database import get_db
 from lineup import get_team_strategy
 
+from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_all_players
+
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 def get_team_roster(team_id):
@@ -28,41 +30,58 @@ def get_all_teams():
     conn.close()
     return teams
 
-def ask_claude_to_propose_trade(proposing_team, their_roster, 
-                                 receiving_team, their_roster_2, 
-                                 week, strategy):
-    """Ask Claude if it wants to propose a trade to another team"""
+def ask_claude_to_propose_trade(proposing_team, their_roster,
+                                 receiving_team, their_roster_2,
+                                 week, strategy, season="2026"):
+    """Ask Claude if it wants to propose a trade with enriched metrics"""
 
-    my_roster_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in their_roster
-    ])
+    all_players_meta = fetch_all_players()
 
-    their_roster_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in their_roster_2
-    ])
+    def build_roster_str(roster):
+        lines = []
+        for p in roster:
+            pid = p['id']
+            meta = all_players_meta.get(pid, {})
+            age = meta.get("age", 0) or 0
+            years_exp = meta.get("years_exp", 0) or 0
+            season_metrics = get_season_metrics(
+                pid, meta, season, week, all_players_meta)
+            grade = grade_player_inseason(season_metrics, p['position'], age)
+            context = format_player_context(
+                p['name'], p['position'], age, years_exp,
+                season_metrics, inseason_grade=grade)
+            lines.append((grade, context))
+        lines.sort(key=lambda x: x[0], reverse=True)
+        return "\n\n".join(ctx for _, ctx in lines)
+
+    my_roster_str   = build_roster_str(their_roster)
+    their_roster_str = build_roster_str(their_roster_2)
 
     prompt = f"""You are a fantasy football agent managing {proposing_team['name']} in week {week} of an 18-week PPR season.
 
 Your strategy: {strategy}
 
-Your roster:
+Your roster (sorted by grade):
 {my_roster_str}
 
-{receiving_team['name']}'s roster:
+{receiving_team['name']}'s roster (sorted by grade):
 {their_roster_str}
 
-Based on your strategy and roster needs, decide if you want to propose a trade to {receiving_team['name']}.
-Only propose a trade if it genuinely improves your team based on your strategy.
+TRADE RULES:
+- Only propose a trade if it genuinely improves your team's overall grade
+- Target players with higher grades or better trends than what you offer
+- Prioritize acquiring players with 📈 RISING trends
+- Avoid giving up players with high grades or 📈 RISING trends
+- Target aging players (high age discount) on other rosters — offer younger alternatives
+- Never propose a trade that weakens your starting lineup
 
 Respond in exactly this format:
 PROPOSE: YES or NO
-OFFER: [player name from YOUR roster you are offering, or NONE]
-REQUEST: [player name from THEIR roster you want, or NONE]
-REASON: [one sentence explaining the trade]
+OFFER: [player name from YOUR roster or NONE]
+REQUEST: [player name from THEIR roster or NONE]
+REASON: [one sentence explaining the trade value]
 
-If you don't want to trade respond with:
+If no beneficial trade exists:
 PROPOSE: NO
 OFFER: NONE
 REQUEST: NONE
@@ -78,26 +97,64 @@ REASON: No beneficial trade available"""
 
 def ask_claude_to_evaluate_trade(receiving_team, their_roster,
                                   proposing_team, offered_player,
-                                  requested_player, week, strategy):
-    """Ask Claude if it wants to accept an incoming trade"""
+                                  requested_player, week, strategy, season="2026"):
+    """Ask Claude if it wants to accept an incoming trade with enriched metrics"""
 
-    roster_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in their_roster
-    ])
+    all_players_meta = fetch_all_players()
+
+    def get_player_context(p):
+        pid = p['id']
+        meta = all_players_meta.get(pid, {})
+        age = meta.get("age", 0) or 0
+        years_exp = meta.get("years_exp", 0) or 0
+        season_metrics = get_season_metrics(
+            pid, meta, season, week, all_players_meta)
+        grade = grade_player_inseason(season_metrics, p['position'], age)
+        return format_player_context(
+            p['name'], p['position'], age, years_exp,
+            season_metrics, inseason_grade=grade), grade
+
+    # Build enriched roster
+    roster_lines = []
+    for p in their_roster:
+        ctx, grade = get_player_context(p)
+        roster_lines.append((grade, ctx))
+    roster_lines.sort(key=lambda x: x[0], reverse=True)
+    roster_str = "\n\n".join(ctx for _, ctx in roster_lines)
+
+    # Get enriched context for trade players
+    offered_ctx, offered_grade   = get_player_context(offered_player)
+    requested_ctx, requested_grade = get_player_context(requested_player)
 
     prompt = f"""You are a fantasy football agent managing {receiving_team['name']} in week {week} of an 18-week PPR season.
 
 Your strategy: {strategy}
 
-Your current roster:
+Your current roster (sorted by grade):
 {roster_str}
 
-{proposing_team['name']} is offering you this trade:
-They give you: {offered_player['name']} ({offered_player['position']} - {offered_player['nfl_team'] or 'FA'})
-They want from you: {requested_player['name']} ({requested_player['position']} - {requested_player['nfl_team'] or 'FA'})
+Incoming trade offer from {proposing_team['name']}:
 
-Based on your strategy, should you accept this trade?
+THEY GIVE YOU:
+{offered_ctx}
+
+THEY WANT FROM YOU:
+{requested_ctx}
+
+TRADE EVALUATION:
+- Player coming in grade: {offered_grade}/100
+- Player going out grade: {requested_grade}/100
+- Grade difference: {offered_grade - requested_grade:+.1f}
+
+ACCEPT if:
+- The player coming in has a higher grade than the player going out
+- The player coming in has better trends (📈 vs 📉)
+- The trade improves your weakest position
+
+REJECT if:
+- The player going out has a higher grade
+- The player going out has 📈 RISING trends
+- The trade weakens your starting lineup
 
 Respond in exactly this format:
 DECISION: ACCEPT or REJECT
@@ -110,7 +167,7 @@ REASON: [one sentence explaining your decision]"""
     )
 
     return message.content[0].text.strip()
-
+    
 def parse_trade_proposal(response, my_roster, their_roster):
     """Parse Claude's trade proposal"""
     lines = response.strip().split("\n")

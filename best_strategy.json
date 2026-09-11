@@ -1,65 +1,133 @@
 {
-  "generated": "2026-09-11T12:04:58.717666",
-  "in_sample_seasons": [
-    2021,
-    2022,
-    2023
+  "generated": "2026-09-11T12:43:05.489624",
+  "in_sample_pairs": [
+    [
+      2022,
+      2023
+    ],
+    [
+      2023,
+      2024
+    ]
   ],
-  "out_of_sample_seasons": [
-    2024,
-    2025
+  "out_of_sample_pairs": [
+    [
+      2024,
+      2025
+    ]
   ],
-  "total_combos_tested": 54,
-  "in_sample_win_rate": 0.641,
-  "out_of_sample_win_rate": 0.4231,
-  "verdict": "\u274c OVERFIT \u2014 strategy fails on unseen data",
+  "total_combos_tested": 288,
+  "in_sample_win_rate": 0.7647,
+  "out_of_sample_win_rate": 0.5882,
+  "degradation": 0.1765,
+  "verdict": "\u2705 STRONG EDGE \u2014 strategy validated convincingly",
   "best_params": {
-    "hist_w": 0.3,
-    "dyn_w": 0.7,
-    "proj_influence": 0.33,
-    "age_discount": "mild",
-    "injury_penalty": "none"
+    "adp_curve": "linear",
+    "proj_influence": 0.75,
+    "age_discount": "aggressive",
+    "injury_penalty": "none",
+    "team_change": "none"
   },
   "top_10_in_sample": [
     {
-      "label": "hist=30/dyn=70 | proj=33% | age=mild | inj=none",
-      "win_rate": 0.641
+      "params": {
+        "adp_curve": "linear",
+        "proj_influence": 0.75,
+        "age_discount": "aggressive",
+        "injury_penalty": "none",
+        "team_change": "none"
+      },
+      "win_rate": 0.7647
     },
     {
-      "label": "hist=50/dyn=50 | proj=33% | age=mild | inj=none",
-      "win_rate": 0.641
+      "params": {
+        "adp_curve": "linear",
+        "proj_influence": 0.75,
+        "age_discount": "aggressive",
+        "injury_penalty": "none",
+        "team_change": "mild"
+      },
+      "win_rate": 0.7647
     },
     {
-      "label": "hist=70/dyn=30 | proj=33% | age=mild | inj=none",
-      "win_rate": 0.641
+      "params": {
+        "adp_curve": "linear",
+        "proj_influence": 0.75,
+        "age_discount": "aggressive",
+        "injury_penalty": "none",
+        "team_change": "aggressive"
+      },
+      "win_rate": 0.7647
     },
     {
-      "label": "hist=30/dyn=70 | proj=66% | age=none | inj=mild",
-      "win_rate": 0.5897
+      "params": {
+        "adp_curve": "gradual",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "none"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=50/dyn=50 | proj=66% | age=none | inj=mild",
-      "win_rate": 0.5897
+      "params": {
+        "adp_curve": "gradual",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "mild"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=70/dyn=30 | proj=66% | age=none | inj=mild",
-      "win_rate": 0.5897
+      "params": {
+        "adp_curve": "gradual",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "aggressive"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=30/dyn=70 | proj=33% | age=none | inj=mild",
-      "win_rate": 0.5641
+      "params": {
+        "adp_curve": "logarithmic",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "none"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=50/dyn=50 | proj=33% | age=none | inj=mild",
-      "win_rate": 0.5641
+      "params": {
+        "adp_curve": "logarithmic",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "mild"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=70/dyn=30 | proj=33% | age=none | inj=mild",
-      "win_rate": 0.5641
+      "params": {
+        "adp_curve": "logarithmic",
+        "proj_influence": 0.25,
+        "age_discount": "none",
+        "injury_penalty": "none",
+        "team_change": "aggressive"
+      },
+      "win_rate": 0.7059
     },
     {
-      "label": "hist=30/dyn=70 | proj=0% | age=mild | inj=mild",
-      "win_rate": 0.5385
+      "params": {
+        "adp_curve": "linear",
+        "proj_influence": 0.0,
+        "age_discount": "mild",
+        "injury_penalty": "mild",
+        "team_change": "none"
+      },
+      "win_rate": 0.6765
     }
   ]
 }

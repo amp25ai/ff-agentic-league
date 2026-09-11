@@ -2,6 +2,8 @@ import os
 import anthropic
 from database import get_db
 
+from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_nfl_state, fetch_all_players
+
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 # Standard roster slots
@@ -45,19 +47,45 @@ def get_team_strategy(owner):
     except FileNotFoundError:
         return "Start the best available players at each position."
 
-def ask_claude_for_lineup(team, roster, week, strategy):
-    """Ask Claude to set the optimal lineup for a team"""
+def ask_claude_for_lineup(team, roster, week, strategy, season="2026"):
+    """Ask Claude to set the optimal lineup with enriched player metrics"""
     
-    roster_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['nfl_team'] or 'FA'})"
-        for p in roster
-    ])
+    all_players_meta = fetch_all_players()
+    
+    # Build enriched roster with grades and metrics
+    roster_lines = []
+    for p in roster:
+        pid = p['id']
+        meta = all_players_meta.get(pid, {})
+        age = meta.get("age", 0) or 0
+        years_exp = meta.get("years_exp", 0) or 0
+        position = p['position']
+        
+        # Get current season metrics
+        season_metrics = get_season_metrics(
+            pid, meta, season, week, all_players_meta
+        )
+        
+        # Calculate in-season grade
+        grade = grade_player_inseason(season_metrics, position, age)
+        
+        # Format context
+        context = format_player_context(
+            p['name'], position, age, years_exp,
+            season_metrics, inseason_grade=grade
+        )
+        roster_lines.append((grade, context))
+    
+    # Sort by grade
+    roster_lines.sort(key=lambda x: x[0], reverse=True)
+    roster_str = "\n\n".join(ctx for _, ctx in roster_lines)
 
     prompt = f"""You are a fantasy football agent managing {team['name']} in week {week} of an 18-week PPR season.
 
 Your strategy: {strategy}
 
-Your full roster:
+Your full roster with data-driven grades and metrics:
+
 {roster_str}
 
 Set the optimal starting lineup for this week.
@@ -69,11 +97,13 @@ Starting slots needed:
 - 1 FLEX (RB, WR, or TE)
 - 1 K
 
-Rules:
-- You must fill every slot
-- A player can only start once
-- Choose players most likely to score points in PPR scoring
-- Consider matchups, injuries, and bye weeks
+LINEUP RULES:
+- Prioritize players with higher In-Season Grade
+- Prioritize rising target share and snap share trends (📈)
+- Be cautious of players with falling trends (📉)
+- Never bench a player with 20%+ target share for a matchup
+- For RBs, prioritize opportunity share above all else
+- A player below 55% snap share is a risk to start
 
 Respond in this exact format, one player per line:
 QB: [player name]
@@ -92,7 +122,7 @@ K: [player name]"""
     )
     
     return message.content[0].text.strip()
-
+    
 def parse_lineup(response, roster):
     """Parse Claude's lineup response into player ids"""
     lines = response.strip().split("\n")

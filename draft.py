@@ -4,6 +4,8 @@ import sqlite3
 import anthropic
 from players import get_nfl_players
 
+from grade import grade_player_draft, fetch_current_projections, fetch_all_players, adp_to_grade, get_experience_bucket, get_age_multiplier
+
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 def draft_already_completed():
@@ -99,16 +101,65 @@ def get_roster_summary(roster):
     
     return counts, needs
 
-def agent_pick(agent, available_players, roster, pick_number, round_num):
-    """Ask Claude to make a pick for an agent"""
+def agent_pick(agent, available_players, roster, pick_number, round_num, projections=None, all_players_meta=None):
+    """Ask Claude to make a pick with enriched player data"""
+
+    # Build enriched available players list with grades
+    top_available = list(available_players.values())[:40]
     
-    # Show top 30 available players
-    top_available = list(available_players.values())[:30]
-    available_str = "\n".join([
-        f"- {p['name']} ({p['position']} - {p['team']})"
-        for p in top_available
-    ])
+    available_lines = []
+    for p in top_available:
+        pid = p['id']
+        
+        # Get ADP and projection signal
+        signal = {}
+        if projections and pid in projections:
+            proj = projections[pid]
+            signal = {
+                "adp": proj.get("adp_dd_ppr"),
+                "proj_pts": proj.get("pts_ppr", 0)
+            }
+        
+        # Get player metadata
+        meta = {}
+        if all_players_meta and pid in all_players_meta:
+            meta = all_players_meta[pid]
+        
+        age = meta.get("age", 0) or 0
+        years_exp = meta.get("years_exp", 0) or 0
+        bucket = get_experience_bucket(years_exp)
+        age_mult = get_age_multiplier(age, p['position'], "aggressive")
+        
+        # Calculate draft grade
+        player_data = {
+            "position": p['position'],
+            "age": age,
+            "years_exp": years_exp,
+            "avg_pts": 0,
+            "avg_target_share": 0,
+            "avg_snap_share": 0.7,
+            "avg_wopr": 0,
+            "avg_rz_share": 0,
+            "avg_opp_share": 0,
+            "games_played": 10,
+        }
+        grade = grade_player_draft(player_data, signal)
+        
+        adp = signal.get("adp", "N/A")
+        proj = signal.get("proj_pts", 0)
+        proj_season = round(proj * 17, 1) if proj else "N/A"
+        
+        line = (f"- {p['name']} ({p['position']} - {p['team']}) "
+                f"| Grade: {grade} | ADP: {adp} "
+                f"| Proj season pts: {proj_season} "
+                f"| Age: {age} ({bucket}) "
+                f"| Age factor: {age_mult:.2f}")
+        available_lines.append((grade, line))
     
+    # Sort by grade descending
+    available_lines.sort(key=lambda x: x[0], reverse=True)
+    available_str = "\n".join(line for _, line in available_lines)
+
     roster_str = "\n".join([
         f"- {p['name']} ({p['position']})"
         for p in roster
@@ -129,11 +180,17 @@ Your current roster:
 
 Positions still needed: {needs_str}
 
-Top available players:
+Top available players (sorted by data-driven grade):
 {available_str}
 
+GRADING EXPLANATION:
+- Grade (0-100): Overall draft value based on ADP, projected season points, age, and experience
+- ADP: Average draft position across thousands of leagues (lower = more valuable)
+- Proj season pts: Total PPR points projected for the full season
+- Age factor: Multiplier applied for age (1.0 = peak age, lower = past prime)
+
 Pick exactly ONE player from the available list above.
-Consider your positional needs and your strategy.
+Consider your positional needs, your strategy, and the grades provided.
 Respond with ONLY the player's exact full name, nothing else."""
 
     message = client.messages.create(
@@ -165,6 +222,12 @@ def run_draft():
         print("🚫 Draft already completed - league is live!")
         print("   Delete league.db only if you want to start over.")
         return
+        # Fetch enriched data for grading
+    print("📊 Fetching 2026 projections and player metadata...")
+    projections = fetch_current_projections("2026", 1)
+    all_players_meta = fetch_all_players()
+    print(f"✅ Got {len(projections)} player projections")
+    
     print("🏈 Loading NFL players...")
     all_players = get_nfl_players()
     available_players = dict(all_players)
@@ -190,7 +253,9 @@ def run_draft():
             available_players,
             rosters[team_idx],
             pick_num + 1,
-            round_num
+            round_num,
+            projections=projections,
+            all_players_meta=all_players_meta
         )
 
         print(f"  → Claude chose: {picked_name}")
