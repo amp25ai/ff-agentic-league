@@ -502,10 +502,10 @@
                     <tr>
                         <th>#</th>
                         <th>Team</th>
-                        <th>Owner</th>
                         <th>W</th>
                         <th>L</th>
                         <th>Points</th>
+                        <th>Percentile</th>
                     </tr>
                 </thead>
                 <tbody id="standingsBody">
@@ -603,15 +603,42 @@
     }
 
     function loadStandings() {
-        // Placeholder standings until database API is connected
         const body = document.getElementById('standingsBody');
-        const teams = OWNERS.map((owner, i) => ({
-            name: `Team ${owner}`,
-            owner,
-            wins: 0,
-            losses: 0,
-            points: 0
-        }));
+
+        Promise.all([
+            fetch(`${API_BASE}/api/standings`).then(r => r.json()).catch(() => ({standings: []})),
+            fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/percentiles.json').then(r => r.json()).catch(() => ({by_owner: {}}))
+        ]).then(([standingsData, percentileData]) => {
+            const teams = standingsData.standings || [];
+
+            if (!teams.length) {
+                body.innerHTML = '<tr><td colspan="6" class="empty">No standings yet — season hasn\'t started</td></tr>';
+                return;
+            }
+
+            const percentiles = percentileData.by_owner || {};
+
+            body.innerHTML = teams.map((t, i) => {
+                const ownerPercentiles = percentiles[t.owner] || [];
+                let percentileLabel = '—';
+                if (ownerPercentiles.length > 0) {
+                    const avg = ownerPercentiles.reduce((sum, w) => sum + w.percentile, 0) / ownerPercentiles.length;
+                    percentileLabel = `${Math.round(avg)}th`;
+                }
+
+                return `
+                    <tr>
+                        <td class="rank ${i === 0 ? 'first' : i === 1 ? 'second' : i === 2 ? 'third' : ''}">${RANK_LABELS[i] || (i+1)}</td>
+                        <td class="team-name-cell">${t.name}</td>
+                        <td class="record-cell">${t.wins}</td>
+                        <td class="record-cell">${t.losses}</td>
+                        <td class="points-cell">${t.total_points.toFixed(1)}</td>
+                        <td style="font-size:13px;color:#8b949e;">${percentileLabel}</td>
+                    </tr>
+                `;
+            }).join('');
+        });
+    }
 
      let currentNewsletter = null;
 
