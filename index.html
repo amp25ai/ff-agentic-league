@@ -889,8 +889,7 @@
                             <div style="font-size:12px;color:#8b949e;">Proj ${home.total_projected.toFixed(1)}</div>
                         </div>
                         <div style="text-align:center;padding:0 16px;">
-                            <div style="font-size:11px;color:#8b949e;margin-bottom:4px;">WIN PROB</div>
-                            <div style="font-size:13px;font-weight:700;color:#58a6ff;">${homeWinProb}% - ${awayWinProb}%</div>
+                            <div style="font-size:11px;color:#8b949e;">vs</div>
                         </div>
                         <div style="text-align:right;flex:1;">
                             <div style="font-size:13px;color:#8b949e;">${away.owner}</div>
@@ -900,15 +899,17 @@
                         </div>
                     </div>
 
-                    <!-- WIN PROBABILITY BAR -->
-                    <div style="background:#21262d;border-radius:4px;height:8px;overflow:hidden;">
-                        <div style="height:100%;width:${homeWinProb}%;background:linear-gradient(90deg,#58a6ff,#3fb950);border-radius:4px;"></div>
+                                        <!-- WIN PROBABILITY BAR -->
+                    <div style="margin-top:12px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                            <span style="font-size:12px;font-weight:700;color:#58a6ff;">${home.team} ${homeWinProb}%</span>
+                            <span style="font-size:11px;color:#8b949e;">WIN PROB</span>
+                            <span style="font-size:12px;font-weight:700;color:#bc8cff;">${awayWinProb}% ${away.team}</span>
+                        </div>
+                        <div style="background:#21262d;border-radius:20px;height:10px;overflow:hidden;">
+                            <div style="height:100%;width:${homeWinProb}%;background:#58a6ff;border-radius:20px 0 0 20px;transition:width 0.5s;"></div>
+                        </div>
                     </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
-                        <span style="font-size:11px;color:#8b949e;">${homeWinProb}%</span>
-                        <span style="font-size:11px;color:#8b949e;">${awayWinProb}%</span>
-                    </div>
-                </div>
 
                 <!-- PLAYER ROWS -->
                 <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;overflow:hidden;">
@@ -963,7 +964,20 @@
     // Auto refresh every 60 seconds when live
     setInterval(() => {
         if (document.getElementById('tab-matchups').classList.contains('active')) {
-            loadMatchups();
+            if (selectedMatchup) {
+                // Refresh the current matchup detail
+                fetch(`${API_BASE}/api/matchup/${currentWeek}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        const updated = data.matchups?.find(
+                            m => m.home.owner === selectedMatchup.home.owner
+                        );
+                        if (updated) showMatchupDetail(0, updated);
+                    })
+                    .catch(() => {});
+            } else {
+                loadMatchups();
+            }
         }
     }, 60000);
 
