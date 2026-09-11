@@ -1,0 +1,32 @@
+{
+  "standings": [
+    {
+      "name": "Team Ched",
+      "owner": "Ched",
+      "wins": 0,
+      "losses": 0,
+      "total_points": 0.0
+    },
+    {
+      "name": "Team JPI",
+      "owner": "JPI",
+      "wins": 0,
+      "losses": 0,
+      "total_points": 0.0
+    },
+    {
+      "name": "Team Naesh",
+      "owner": "Naesh",
+      "wins": 0,
+      "losses": 0,
+      "total_points": 0.0
+    },
+    {
+      "name": "Team Mert",
+      "owner": "Mert",
+      "wins": 0,
+      "losses": 0,
+      "total_points": 0.0
+    }
+  ]
+}

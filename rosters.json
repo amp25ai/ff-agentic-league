@@ -1,0 +1,364 @@
+{
+  "rosters": [
+    {
+      "team": "Team Ched",
+      "owner": "Ched",
+      "players": [
+        {
+          "id": "13833",
+          "name": "Dominic Zvada",
+          "position": "K",
+          "nfl_team": "NYG"
+        },
+        {
+          "id": "6904",
+          "name": "Jalen Hurts",
+          "position": "QB",
+          "nfl_team": "PHI"
+        },
+        {
+          "id": "9221",
+          "name": "Jahmyr Gibbs",
+          "position": "RB",
+          "nfl_team": "DET"
+        },
+        {
+          "id": "12481",
+          "name": "Cam Skattebo",
+          "position": "RB",
+          "nfl_team": "NYG"
+        },
+        {
+          "id": "7588",
+          "name": "Javonte Williams",
+          "position": "RB",
+          "nfl_team": "DAL"
+        },
+        {
+          "id": "8151",
+          "name": "Kenneth Walker",
+          "position": "RB",
+          "nfl_team": "KC"
+        },
+        {
+          "id": "4034",
+          "name": "Christian McCaffrey",
+          "position": "RB",
+          "nfl_team": "SF"
+        },
+        {
+          "id": "10859",
+          "name": "Sam LaPorta",
+          "position": "TE",
+          "nfl_team": "DET"
+        },
+        {
+          "id": "7547",
+          "name": "Amon-Ra St. Brown",
+          "position": "WR",
+          "nfl_team": "DET"
+        },
+        {
+          "id": "12514",
+          "name": "Emeka Egbuka",
+          "position": "WR",
+          "nfl_team": "TB"
+        },
+        {
+          "id": "9488",
+          "name": "Jaxon Smith-Njigba",
+          "position": "WR",
+          "nfl_team": "SEA"
+        },
+        {
+          "id": "7569",
+          "name": "Nico Collins",
+          "position": "WR",
+          "nfl_team": "HOU"
+        },
+        {
+          "id": "8144",
+          "name": "Chris Olave",
+          "position": "WR",
+          "nfl_team": "NO"
+        },
+        {
+          "id": "8167",
+          "name": "Christian Watson",
+          "position": "WR",
+          "nfl_team": "GB"
+        }
+      ]
+    },
+    {
+      "team": "Team JPI",
+      "owner": "JPI",
+      "players": [
+        {
+          "id": "6083",
+          "name": "Matt Gay",
+          "position": "K",
+          "nfl_team": "LV"
+        },
+        {
+          "id": "11564",
+          "name": "Drake Maye",
+          "position": "QB",
+          "nfl_team": "NE"
+        },
+        {
+          "id": "12522",
+          "name": "Cam Ward",
+          "position": "QB",
+          "nfl_team": "TEN"
+        },
+        {
+          "id": "9509",
+          "name": "Bijan Robinson",
+          "position": "RB",
+          "nfl_team": "ATL"
+        },
+        {
+          "id": "11584",
+          "name": "Bucky Irving",
+          "position": "RB",
+          "nfl_team": "TB"
+        },
+        {
+          "id": "13287",
+          "name": "Jeremiyah Love",
+          "position": "RB",
+          "nfl_team": "ARI"
+        },
+        {
+          "id": "8130",
+          "name": "Trey McBride",
+          "position": "TE",
+          "nfl_team": "ARI"
+        },
+        {
+          "id": "12506",
+          "name": "Harold Fannin",
+          "position": "TE",
+          "nfl_team": "CLE"
+        },
+        {
+          "id": "7564",
+          "name": "Ja'Marr Chase",
+          "position": "WR",
+          "nfl_team": "CIN"
+        },
+        {
+          "id": "9997",
+          "name": "Zay Flowers",
+          "position": "WR",
+          "nfl_team": "BAL"
+        },
+        {
+          "id": "8146",
+          "name": "Garrett Wilson",
+          "position": "WR",
+          "nfl_team": "NYJ"
+        },
+        {
+          "id": "7526",
+          "name": "Jaylen Waddle",
+          "position": "WR",
+          "nfl_team": "DEN"
+        },
+        {
+          "id": "9756",
+          "name": "Jordan Addison",
+          "position": "WR",
+          "nfl_team": "MIN"
+        },
+        {
+          "id": "8126",
+          "name": "Wan'Dale Robinson",
+          "position": "WR",
+          "nfl_team": "TEN"
+        }
+      ]
+    },
+    {
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "players": [
+        {
+          "id": "4227",
+          "name": "Harrison Butker",
+          "position": "K",
+          "nfl_team": "KC"
+        },
+        {
+          "id": "4881",
+          "name": "Lamar Jackson",
+          "position": "QB",
+          "nfl_team": "BAL"
+        },
+        {
+          "id": "12527",
+          "name": "Ashton Jeanty",
+          "position": "RB",
+          "nfl_team": "LV"
+        },
+        {
+          "id": "9226",
+          "name": "De'Von Achane",
+          "position": "RB",
+          "nfl_team": "MIA"
+        },
+        {
+          "id": "9224",
+          "name": "Chase Brown",
+          "position": "RB",
+          "nfl_team": "CIN"
+        },
+        {
+          "id": "8138",
+          "name": "James Cook",
+          "position": "RB",
+          "nfl_team": "BUF"
+        },
+        {
+          "id": "12517",
+          "name": "Colston Loveland",
+          "position": "TE",
+          "nfl_team": "CHI"
+        },
+        {
+          "id": "11632",
+          "name": "Malik Nabers",
+          "position": "WR",
+          "nfl_team": "NYG"
+        },
+        {
+          "id": "12519",
+          "name": "Luther Burden",
+          "position": "WR",
+          "nfl_team": "CHI"
+        },
+        {
+          "id": "8137",
+          "name": "George Pickens",
+          "position": "WR",
+          "nfl_team": "DAL"
+        },
+        {
+          "id": "11646",
+          "name": "Jalen Coker",
+          "position": "WR",
+          "nfl_team": "CAR"
+        },
+        {
+          "id": "10229",
+          "name": "Rashee Rice",
+          "position": "WR",
+          "nfl_team": "KC"
+        },
+        {
+          "id": "10222",
+          "name": "Jayden Reed",
+          "position": "WR",
+          "nfl_team": "GB"
+        },
+        {
+          "id": "9500",
+          "name": "Josh Downs",
+          "position": "WR",
+          "nfl_team": "IND"
+        }
+      ]
+    },
+    {
+      "team": "Team Mert",
+      "owner": "Mert",
+      "players": [
+        {
+          "id": "11533",
+          "name": "Brandon Aubrey",
+          "position": "K",
+          "nfl_team": "DAL"
+        },
+        {
+          "id": "12508",
+          "name": "Jaxson Dart",
+          "position": "QB",
+          "nfl_team": "NYG"
+        },
+        {
+          "id": "11560",
+          "name": "Caleb Williams",
+          "position": "QB",
+          "nfl_team": "CHI"
+        },
+        {
+          "id": "12507",
+          "name": "Omarion Hampton",
+          "position": "RB",
+          "nfl_team": "LAC"
+        },
+        {
+          "id": "8155",
+          "name": "Breece Hall",
+          "position": "RB",
+          "nfl_team": "NYJ"
+        },
+        {
+          "id": "12518",
+          "name": "Tyler Warren",
+          "position": "TE",
+          "nfl_team": "IND"
+        },
+        {
+          "id": "8131",
+          "name": "Isaiah Likely",
+          "position": "TE",
+          "nfl_team": "NYG"
+        },
+        {
+          "id": "12526",
+          "name": "Tetairoa McMillan",
+          "position": "WR",
+          "nfl_team": "CAR"
+        },
+        {
+          "id": "11635",
+          "name": "Ladd McConkey",
+          "position": "WR",
+          "nfl_team": "LAC"
+        },
+        {
+          "id": "7525",
+          "name": "DeVonta Smith",
+          "position": "WR",
+          "nfl_team": "PHI"
+        },
+        {
+          "id": "8148",
+          "name": "Jameson Williams",
+          "position": "WR",
+          "nfl_team": "DET"
+        },
+        {
+          "id": "8112",
+          "name": "Drake London",
+          "position": "WR",
+          "nfl_team": "ATL"
+        },
+        {
+          "id": "11620",
+          "name": "Rome Odunze",
+          "position": "WR",
+          "nfl_team": "CHI"
+        },
+        {
+          "id": "9487",
+          "name": "Parker Washington",
+          "position": "WR",
+          "nfl_team": "JAX"
+        }
+      ]
+    }
+  ]
+}
