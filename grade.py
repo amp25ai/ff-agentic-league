@@ -58,6 +58,61 @@ def fetch_nfl_state():
     r = requests.get(url)
     return r.json() if r.status_code == 200 else {}
 
+def fetch_bye_weeks(year=2026):
+    """
+    Fetch bye weeks for all NFL teams from ESPN.
+    Returns dict: {team_abbreviation: bye_week_number}
+    """
+    cache_file = f"bye_weeks_{year}.json"
+    if os.path.exists(cache_file):
+        with open(cache_file) as f:
+            return json.load(f)
+
+    # ESPN abbreviations exactly as they appear in scoreboard
+    all_teams = {
+        'ARI','ATL','BAL','BUF','CAR','CHI','CIN','CLE',
+        'DAL','DEN','DET','GB','HOU','IND','JAX','KC',
+        'LAR','LAC','LV','MIA','MIN','NE','NO','NYG',
+        'NYJ','PHI','PIT','SEA','SF','TB','TEN','WSH'
+    }
+
+    # Map ESPN abbreviations back to Sleeper abbreviations
+    espn_to_sleeper = {
+        'LAR': 'LA',
+        'WSH': 'WAS',
+    }
+
+    bye_weeks = {}
+
+    for week in range(1, 18):  # Weeks 1-17 only, week 18 has no byes
+        url = (f"https://site.api.espn.com/apis/site/v2/sports/football/"
+               f"nfl/scoreboard?seasontype=2&week={week}&year={year}")
+        try:
+            r = requests.get(url, timeout=10)
+            data = r.json()
+            events = data.get('events', [])
+
+            playing = set()
+            for event in events:
+                name = event.get('shortName', '')
+                if ' @ ' in name:
+                    away, home = name.split(' @ ')
+                    playing.add(away.strip())
+                    playing.add(home.strip())
+
+            on_bye = all_teams - playing
+            for team in on_bye:
+                sleeper_team = espn_to_sleeper.get(team, team)
+                bye_weeks[sleeper_team] = week
+        except Exception:
+            continue
+
+    with open(cache_file, "w") as f:
+        json.dump(bye_weeks, f)
+
+    print(f"✅ Bye weeks fetched for {len(bye_weeks)} teams")
+    return bye_weeks
+
 def fetch_all_players():
     """Fetch all NFL player metadata"""
     cache = "all_players.json"

@@ -1,1821 +1,1059 @@
 {
+  "settings": {
+    "teams": 4,
+    "rounds": 14,
+    "scoring": "PPR",
+    "waivers": "Standard"
+  },
   "draft": [
     {
       "round": 1,
       "pick": 1,
       "overall": 1,
-      "team": "Team Alpha",
-      "player": "Omarion Hampton",
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Ashton Jeanty",
       "position": "RB",
-      "team_abbr": "LAC"
+      "nfl_team": "LV"
     },
     {
       "round": 1,
       "pick": 2,
       "overall": 2,
-      "team": "Team Beta",
-      "player": "CeeDee Lamb",
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Ja'Marr Chase",
       "position": "WR",
-      "team_abbr": "DAL"
+      "nfl_team": "CIN"
     },
     {
       "round": 1,
       "pick": 3,
       "overall": 3,
-      "team": "Team Gamma",
-      "player": "Bucky Irving",
-      "position": "RB",
-      "team_abbr": "TB"
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Malik Nabers",
+      "position": "WR",
+      "nfl_team": "NYG"
     },
     {
       "round": 1,
       "pick": 4,
       "overall": 4,
-      "team": "Team Delta",
-      "player": "Kinkead Dent",
-      "position": "QB",
-      "team_abbr": null
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Jahmyr Gibbs",
+      "position": "RB",
+      "nfl_team": "DET"
     },
     {
-      "round": 1,
-      "pick": 5,
+      "round": 2,
+      "pick": 1,
       "overall": 5,
-      "team": "Team Epsilon",
-      "player": "Kendall Milton",
-      "position": "RB",
-      "team_abbr": "CIN"
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Tetairoa McMillan",
+      "position": "WR",
+      "nfl_team": "CAR"
     },
     {
-      "round": 1,
-      "pick": 6,
+      "round": 2,
+      "pick": 2,
       "overall": 6,
-      "team": "Team Zeta",
-      "player": "Brandon Aubrey",
-      "position": "K",
-      "team_abbr": "DAL"
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Omarion Hampton",
+      "position": "RB",
+      "nfl_team": "LAC"
     },
     {
-      "round": 1,
-      "pick": 7,
+      "round": 2,
+      "pick": 3,
       "overall": 7,
-      "team": "Team Eta",
-      "player": "Ellis Richardson",
-      "position": "TE",
-      "team_abbr": null
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Cam Skattebo",
+      "position": "RB",
+      "nfl_team": "NYG"
     },
     {
-      "round": 1,
-      "pick": 8,
+      "round": 2,
+      "pick": 4,
       "overall": 8,
-      "team": "Team Theta",
-      "player": "Jerry Jeudy",
-      "position": "WR",
-      "team_abbr": "CLE"
-    },
-    {
-      "round": 2,
-      "pick": 1,
-      "overall": 9,
-      "team": "Team Theta",
-      "player": "Jaleel McLaughlin",
-      "position": "RB",
-      "team_abbr": "DEN"
-    },
-    {
-      "round": 2,
-      "pick": 2,
-      "overall": 10,
-      "team": "Team Eta",
-      "player": "Kyle Pitts",
-      "position": "TE",
-      "team_abbr": "ATL"
-    },
-    {
-      "round": 2,
-      "pick": 3,
-      "overall": 11,
-      "team": "Team Zeta",
-      "player": "Salvon Ahmed",
-      "position": "RB",
-      "team_abbr": "CHI"
-    },
-    {
-      "round": 2,
-      "pick": 4,
-      "overall": 12,
-      "team": "Team Epsilon",
-      "player": "Kayshon Boutte",
-      "position": "WR",
-      "team_abbr": "HOU"
-    },
-    {
-      "round": 2,
-      "pick": 5,
-      "overall": 13,
-      "team": "Team Delta",
-      "player": "Behren Morton",
-      "position": "QB",
-      "team_abbr": "NE"
-    },
-    {
-      "round": 2,
-      "pick": 6,
-      "overall": 14,
-      "team": "Team Gamma",
-      "player": "Parker Washington",
-      "position": "WR",
-      "team_abbr": "JAX"
-    },
-    {
-      "round": 2,
-      "pick": 7,
-      "overall": 15,
-      "team": "Team Beta",
-      "player": "Devontez Walker",
-      "position": "WR",
-      "team_abbr": "BAL"
-    },
-    {
-      "round": 2,
-      "pick": 8,
-      "overall": 16,
-      "team": "Team Alpha",
-      "player": "Melvin Gordon",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 3,
-      "pick": 1,
-      "overall": 17,
-      "team": "Team Alpha",
-      "player": "Le'Veon Bell",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 3,
-      "pick": 2,
-      "overall": 18,
-      "team": "Team Beta",
-      "player": "Oronde Gadsden",
-      "position": "TE",
-      "team_abbr": "LAC"
-    },
-    {
-      "round": 3,
-      "pick": 3,
-      "overall": 19,
-      "team": "Team Gamma",
-      "player": "E.J. Jenkins",
-      "position": "TE",
-      "team_abbr": "PHI"
-    },
-    {
-      "round": 3,
-      "pick": 4,
-      "overall": 20,
-      "team": "Team Delta",
-      "player": "Joe Flacco",
-      "position": "QB",
-      "team_abbr": "CIN"
-    },
-    {
-      "round": 3,
-      "pick": 5,
-      "overall": 21,
-      "team": "Team Epsilon",
-      "player": "Adam Randall",
-      "position": "RB",
-      "team_abbr": "BAL"
-    },
-    {
-      "round": 3,
-      "pick": 6,
-      "overall": 22,
-      "team": "Team Zeta",
-      "player": "LaJohntay Wester",
-      "position": "WR",
-      "team_abbr": "BAL"
-    },
-    {
-      "round": 3,
-      "pick": 7,
-      "overall": 23,
-      "team": "Team Eta",
-      "player": "Carl Tucker",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 3,
-      "pick": 8,
-      "overall": 24,
-      "team": "Team Theta",
-      "player": "Boston Scott",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 1,
-      "overall": 25,
-      "team": "Team Theta",
-      "player": "Michael Gallup",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 2,
-      "overall": 26,
-      "team": "Team Eta",
-      "player": "A.J. Rose",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 3,
-      "overall": 27,
-      "team": "Team Zeta",
-      "player": "Rex Burkhead",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 4,
-      "overall": 28,
-      "team": "Team Epsilon",
-      "player": "Jacob Cowing",
-      "position": "WR",
-      "team_abbr": "SF"
-    },
-    {
-      "round": 4,
-      "pick": 5,
-      "overall": 29,
-      "team": "Team Delta",
-      "player": "Ryan Griffin",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 6,
-      "overall": 30,
-      "team": "Team Gamma",
-      "player": "Matt Seybert",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 7,
-      "overall": 31,
-      "team": "Team Beta",
-      "player": "Dorian Singer",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 4,
-      "pick": 8,
-      "overall": 32,
-      "team": "Team Alpha",
-      "player": "Aaron Shampklin",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 1,
-      "overall": 33,
-      "team": "Team Alpha",
-      "player": "Dalyn Dawkins",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 2,
-      "overall": 34,
-      "team": "Team Beta",
-      "player": "TaMerik Williams",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 3,
-      "overall": 35,
-      "team": "Team Gamma",
-      "player": "DeAndrew White",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 4,
-      "overall": 36,
-      "team": "Team Delta",
-      "player": "AJ McCarron",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 5,
-      "overall": 37,
-      "team": "Team Epsilon",
-      "player": "Tyren Montgomery",
-      "position": "WR",
-      "team_abbr": "TEN"
-    },
-    {
-      "round": 5,
-      "pick": 6,
-      "overall": 38,
-      "team": "Team Zeta",
-      "player": "Mo Alie-Cox",
-      "position": "TE",
-      "team_abbr": "IND"
-    },
-    {
-      "round": 5,
-      "pick": 7,
-      "overall": 39,
-      "team": "Team Eta",
-      "player": "Jordan Matthews",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 5,
-      "pick": 8,
-      "overall": 40,
-      "team": "Team Theta",
-      "player": "Jordan Wilkins",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 1,
-      "overall": 41,
-      "team": "Team Theta",
-      "player": "D.J. Foster",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 2,
-      "overall": 42,
-      "team": "Team Eta",
-      "player": "Charles Clay",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 3,
-      "overall": 43,
-      "team": "Team Zeta",
-      "player": "Stephen Anderson",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 4,
-      "overall": 44,
-      "team": "Team Epsilon",
-      "player": "Rahsul Faison",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 5,
-      "overall": 45,
-      "team": "Team Delta",
-      "player": "Ricky Jeune",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 6,
-      "overall": 46,
-      "team": "Team Gamma",
-      "player": "Brett Gabbert",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 6,
-      "pick": 7,
-      "overall": 47,
-      "team": "Team Beta",
-      "player": "Josh Kelly",
-      "position": "WR",
-      "team_abbr": "HOU"
-    },
-    {
-      "round": 6,
-      "pick": 8,
-      "overall": 48,
-      "team": "Team Alpha",
-      "player": "Demario Richard",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 1,
-      "overall": 49,
-      "team": "Team Alpha",
-      "player": "Theo Riddick",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 2,
-      "overall": 50,
-      "team": "Team Beta",
-      "player": "Lincoln Pare",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 3,
-      "overall": 51,
-      "team": "Team Gamma",
-      "player": "Jerome Kapp",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 4,
-      "overall": 52,
-      "team": "Team Delta",
-      "player": "Steven Montez",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 5,
-      "overall": 53,
-      "team": "Team Epsilon",
-      "player": "Brycen Tremayne",
-      "position": "WR",
-      "team_abbr": "CAR"
-    },
-    {
-      "round": 7,
-      "pick": 6,
-      "overall": 54,
-      "team": "Team Zeta",
-      "player": "La'Mical Perine",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 7,
-      "overall": 55,
-      "team": "Team Eta",
-      "player": "Nick Boyle",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 7,
-      "pick": 8,
-      "overall": 56,
-      "team": "Team Theta",
-      "player": "Pierre Strong",
-      "position": "RB",
-      "team_abbr": "GB"
-    },
-    {
-      "round": 8,
-      "pick": 1,
-      "overall": 57,
-      "team": "Team Theta",
-      "player": "Tommy Sweeney",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 8,
-      "pick": 2,
-      "overall": 58,
-      "team": "Team Eta",
-      "player": "Dax Raymond",
-      "position": "TE",
-      "team_abbr": "PIT"
-    },
-    {
-      "round": 8,
-      "pick": 3,
-      "overall": 59,
-      "team": "Team Zeta",
-      "player": "Jake Tonges",
-      "position": "TE",
-      "team_abbr": "SF"
-    },
-    {
-      "round": 8,
-      "pick": 4,
-      "overall": 60,
-      "team": "Team Epsilon",
-      "player": "Julian Fleming",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 8,
-      "pick": 5,
-      "overall": 61,
-      "team": "Team Delta",
-      "player": "Max Duggan",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 8,
-      "pick": 6,
-      "overall": 62,
-      "team": "Team Gamma",
-      "player": "Jakeem Grant",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 8,
-      "pick": 7,
-      "overall": 63,
-      "team": "Team Beta",
-      "player": "Deshaun Fenwick",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 8,
-      "pick": 8,
-      "overall": 64,
-      "team": "Team Alpha",
-      "player": "Justin Jones",
-      "position": "RB",
-      "team_abbr": "SEA"
-    },
-    {
-      "round": 9,
-      "pick": 1,
-      "overall": 65,
-      "team": "Team Alpha",
-      "player": "Josh Ferguson",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 2,
-      "overall": 66,
-      "team": "Team Beta",
-      "player": "Kalif Phillips",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 3,
-      "overall": 67,
-      "team": "Team Gamma",
-      "player": "Ameer Abdullah",
-      "position": "RB",
-      "team_abbr": "JAX"
-    },
-    {
-      "round": 9,
-      "pick": 4,
-      "overall": 68,
-      "team": "Team Delta",
-      "player": "Jacob Eason",
-      "position": "QB",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 5,
-      "overall": 69,
-      "team": "Team Epsilon",
-      "player": "Brandon Cottom",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 6,
-      "overall": 70,
-      "team": "Team Zeta",
-      "player": "Dion Lewis",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 7,
-      "overall": 71,
-      "team": "Team Eta",
-      "player": "Brandon Dillon",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 9,
-      "pick": 8,
-      "overall": 72,
-      "team": "Team Theta",
-      "player": "Keke Coutee",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 10,
-      "pick": 1,
-      "overall": 73,
-      "team": "Team Theta",
-      "player": "Trey Sermon",
-      "position": "RB",
-      "team_abbr": "ATL"
-    },
-    {
-      "round": 10,
-      "pick": 2,
-      "overall": 74,
-      "team": "Team Eta",
-      "player": "Bryce Williams",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 10,
-      "pick": 3,
-      "overall": 75,
-      "team": "Team Zeta",
-      "player": "Davis Mills",
-      "position": "QB",
-      "team_abbr": "HOU"
-    },
-    {
-      "round": 10,
-      "pick": 4,
-      "overall": 76,
-      "team": "Team Epsilon",
-      "player": "Donaven McCulley",
-      "position": "WR",
-      "team_abbr": "MIA"
-    },
-    {
-      "round": 10,
-      "pick": 5,
-      "overall": 77,
-      "team": "Team Delta",
-      "player": "Drew Lock",
-      "position": "QB",
-      "team_abbr": "SEA"
-    },
-    {
-      "round": 10,
-      "pick": 6,
-      "overall": 78,
-      "team": "Team Gamma",
-      "player": "Jaron Brown",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 10,
-      "pick": 7,
-      "overall": 79,
-      "team": "Team Beta",
-      "player": "Ke'Shawn Williams",
-      "position": "WR",
-      "team_abbr": "CIN"
-    },
-    {
-      "round": 10,
-      "pick": 8,
-      "overall": 80,
-      "team": "Team Alpha",
-      "player": "Rasheed Williams",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 11,
-      "pick": 1,
-      "overall": 81,
-      "team": "Team Alpha",
-      "player": "Paul Perkins",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 11,
-      "pick": 2,
-      "overall": 82,
-      "team": "Team Beta",
-      "player": "Audric Estime",
-      "position": "RB",
-      "team_abbr": "NO"
-    },
-    {
-      "round": 11,
-      "pick": 3,
-      "overall": 83,
-      "team": "Team Gamma",
-      "player": "Dak Prescott",
-      "position": "QB",
-      "team_abbr": "DAL"
-    },
-    {
-      "round": 11,
-      "pick": 4,
-      "overall": 84,
-      "team": "Team Delta",
-      "player": "De'Anthony Thomas",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 11,
-      "pick": 5,
-      "overall": 85,
-      "team": "Team Epsilon",
-      "player": "Antonio Williams",
-      "position": "WR",
-      "team_abbr": "WAS"
-    },
-    {
-      "round": 11,
-      "pick": 6,
-      "overall": 86,
-      "team": "Team Zeta",
-      "player": "Darius Clark",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 11,
-      "pick": 7,
-      "overall": 87,
-      "team": "Team Eta",
-      "player": "Christian Sims",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 11,
-      "pick": 8,
-      "overall": 88,
-      "team": "Team Theta",
-      "player": "Javon Leake",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 1,
-      "overall": 89,
-      "team": "Team Theta",
-      "player": "Joel Bouagnon",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 2,
-      "overall": 90,
-      "team": "Team Eta",
-      "player": "Ryan Yurachek",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 3,
-      "overall": 91,
-      "team": "Team Zeta",
-      "player": "Matthew Stafford",
-      "position": "QB",
-      "team_abbr": "LAR"
-    },
-    {
-      "round": 12,
-      "pick": 4,
-      "overall": 92,
-      "team": "Team Epsilon",
-      "player": "Khalil Shakir",
-      "position": "WR",
-      "team_abbr": "BUF"
-    },
-    {
-      "round": 12,
-      "pick": 5,
-      "overall": 93,
-      "team": "Team Delta",
-      "player": "Miles Boykin",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 6,
-      "overall": 94,
-      "team": "Team Gamma",
-      "player": "Dante Pettis",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 7,
-      "overall": 95,
-      "team": "Team Beta",
-      "player": "Xazavian Valladay",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 12,
-      "pick": 8,
-      "overall": 96,
-      "team": "Team Alpha",
-      "player": "Justin Crawford",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 13,
-      "pick": 1,
-      "overall": 97,
-      "team": "Team Alpha",
-      "player": "John Ross",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 13,
-      "pick": 2,
-      "overall": 98,
-      "team": "Team Beta",
-      "player": "Noah Gray",
-      "position": "TE",
-      "team_abbr": "KC"
-    },
-    {
-      "round": 13,
-      "pick": 3,
-      "overall": 99,
-      "team": "Team Gamma",
-      "player": "Ronald Jones",
-      "position": "RB",
-      "team_abbr": null
-    },
-    {
-      "round": 13,
-      "pick": 4,
-      "overall": 100,
-      "team": "Team Delta",
-      "player": "Rashard Davis",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 13,
-      "pick": 5,
-      "overall": 101,
-      "team": "Team Epsilon",
-      "player": "Johnny Wilson",
-      "position": "WR",
-      "team_abbr": "PHI"
-    },
-    {
-      "round": 13,
-      "pick": 6,
-      "overall": 102,
-      "team": "Team Zeta",
-      "player": "Corey Rucker",
-      "position": "WR",
-      "team_abbr": "LV"
-    },
-    {
-      "round": 13,
-      "pick": 7,
-      "overall": 103,
-      "team": "Team Eta",
-      "player": "Joshua Lingenfelter",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 13,
-      "pick": 8,
-      "overall": 104,
-      "team": "Team Theta",
-      "player": "Justice Hill",
-      "position": "RB",
-      "team_abbr": "BAL"
-    },
-    {
-      "round": 14,
-      "pick": 1,
-      "overall": 105,
-      "team": "Team Theta",
-      "player": "Brett Weaver",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 14,
-      "pick": 2,
-      "overall": 106,
-      "team": "Team Eta",
-      "player": "Jacob Hollister",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 14,
-      "pick": 3,
-      "overall": 107,
-      "team": "Team Zeta",
-      "player": "Jamaal Pritchett",
-      "position": "WR",
-      "team_abbr": "NYJ"
-    },
-    {
-      "round": 14,
-      "pick": 4,
-      "overall": 108,
-      "team": "Team Epsilon",
+      "team": "Team Ched",
+      "owner": "Ched",
       "player": "Colston Loveland",
       "position": "TE",
-      "team_abbr": "CHI"
+      "nfl_team": "CHI"
     },
     {
-      "round": 14,
-      "pick": 5,
-      "overall": 109,
-      "team": "Team Delta",
-      "player": "Drew Morgan",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 14,
-      "pick": 6,
-      "overall": 110,
-      "team": "Team Gamma",
-      "player": "Johnny King",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 14,
-      "pick": 7,
-      "overall": 111,
-      "team": "Team Beta",
-      "player": "Jequez Ezzard",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 14,
-      "pick": 8,
-      "overall": 112,
-      "team": "Team Alpha",
-      "player": "Tevin Jones",
-      "position": "WR",
-      "team_abbr": null
-    },
-    {
-      "round": 15,
+      "round": 3,
       "pick": 1,
-      "overall": 113,
-      "team": "Team Alpha",
-      "player": "Albert Wilson",
+      "overall": 9,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Ladd McConkey",
       "position": "WR",
-      "team_abbr": null
+      "nfl_team": "LAC"
     },
     {
-      "round": 15,
+      "round": 3,
       "pick": 2,
-      "overall": 114,
-      "team": "Team Beta",
-      "player": "Jacolby George",
-      "position": "WR",
-      "team_abbr": null
+      "overall": 10,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Tyler Warren",
+      "position": "TE",
+      "nfl_team": "IND"
     },
     {
-      "round": 15,
+      "round": 3,
       "pick": 3,
-      "overall": 115,
-      "team": "Team Gamma",
-      "player": "David Watford",
-      "position": "WR",
-      "team_abbr": null
+      "overall": 11,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Bucky Irving",
+      "position": "RB",
+      "nfl_team": "TB"
     },
     {
-      "round": 15,
+      "round": 3,
       "pick": 4,
-      "overall": 116,
-      "team": "Team Delta",
-      "player": "Jamie Newman",
-      "position": "QB",
-      "team_abbr": null
+      "overall": 12,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Trey McBride",
+      "position": "TE",
+      "nfl_team": "ARI"
     },
     {
-      "round": 15,
-      "pick": 5,
-      "overall": 117,
-      "team": "Team Epsilon",
+      "round": 4,
+      "pick": 1,
+      "overall": 13,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Bijan Robinson",
+      "position": "RB",
+      "nfl_team": "ATL"
+    },
+    {
+      "round": 4,
+      "pick": 2,
+      "overall": 14,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Amon-Ra St. Brown",
+      "position": "WR",
+      "nfl_team": "DET"
+    },
+    {
+      "round": 4,
+      "pick": 3,
+      "overall": 15,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Luther Burden",
+      "position": "WR",
+      "nfl_team": "CHI"
+    },
+    {
+      "round": 4,
+      "pick": 4,
+      "overall": 16,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "De'Von Achane",
+      "position": "RB",
+      "nfl_team": "MIA"
+    },
+    {
+      "round": 5,
+      "pick": 1,
+      "overall": 17,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Emeka Egbuka",
+      "position": "WR",
+      "nfl_team": "TB"
+    },
+    {
+      "round": 5,
+      "pick": 2,
+      "overall": 18,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Breece Hall",
+      "position": "RB",
+      "nfl_team": "NYJ"
+    },
+    {
+      "round": 5,
+      "pick": 3,
+      "overall": 19,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Jaxon Smith-Njigba",
+      "position": "WR",
+      "nfl_team": "SEA"
+    },
+    {
+      "round": 5,
+      "pick": 4,
+      "overall": 20,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Nico Collins",
+      "position": "WR",
+      "nfl_team": "HOU"
+    },
+    {
+      "round": 6,
+      "pick": 1,
+      "overall": 21,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Jaxson Dart",
+      "position": "QB",
+      "nfl_team": "NYG"
+    },
+    {
+      "round": 6,
+      "pick": 2,
+      "overall": 22,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Harold Fannin",
+      "position": "TE",
+      "nfl_team": "CLE"
+    },
+    {
+      "round": 6,
+      "pick": 3,
+      "overall": 23,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Zay Flowers",
+      "position": "WR",
+      "nfl_team": "BAL"
+    },
+    {
+      "round": 6,
+      "pick": 4,
+      "overall": 24,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Drake Maye",
+      "position": "QB",
+      "nfl_team": "NE"
+    },
+    {
+      "round": 7,
+      "pick": 1,
+      "overall": 25,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Jalen Coker",
+      "position": "WR",
+      "nfl_team": "CAR"
+    },
+    {
+      "round": 7,
+      "pick": 2,
+      "overall": 26,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Jalen Hurts",
+      "position": "QB",
+      "nfl_team": "PHI"
+    },
+    {
+      "round": 7,
+      "pick": 3,
+      "overall": 27,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Joe Burrow",
+      "position": "QB",
+      "nfl_team": "CIN"
+    },
+    {
+      "round": 7,
+      "pick": 4,
+      "overall": 28,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "DeVonta Smith",
+      "position": "WR",
+      "nfl_team": "PHI"
+    },
+    {
+      "round": 8,
+      "pick": 1,
+      "overall": 29,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Chris Olave",
+      "position": "WR",
+      "nfl_team": "NO"
+    },
+    {
+      "round": 8,
+      "pick": 2,
+      "overall": 30,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "George Pickens",
+      "position": "WR",
+      "nfl_team": "DAL"
+    },
+    {
+      "round": 8,
+      "pick": 3,
+      "overall": 31,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Garrett Wilson",
+      "position": "WR",
+      "nfl_team": "NYJ"
+    },
+    {
+      "round": 8,
+      "pick": 4,
+      "overall": 32,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Jeremiyah Love",
+      "position": "RB",
+      "nfl_team": "ARI"
+    },
+    {
+      "round": 9,
+      "pick": 1,
+      "overall": 33,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Jaylen Waddle",
+      "position": "WR",
+      "nfl_team": "DEN"
+    },
+    {
+      "round": 9,
+      "pick": 2,
+      "overall": 34,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Jameson Williams",
+      "position": "WR",
+      "nfl_team": "DET"
+    },
+    {
+      "round": 9,
+      "pick": 3,
+      "overall": 35,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Drake London",
+      "position": "WR",
+      "nfl_team": "ATL"
+    },
+    {
+      "round": 9,
+      "pick": 4,
+      "overall": 36,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Sam LaPorta",
+      "position": "TE",
+      "nfl_team": "DET"
+    },
+    {
+      "round": 10,
+      "pick": 1,
+      "overall": 37,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Caleb Williams",
+      "position": "QB",
+      "nfl_team": "CHI"
+    },
+    {
+      "round": 10,
+      "pick": 2,
+      "overall": 38,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Rashee Rice",
+      "position": "WR",
+      "nfl_team": "KC"
+    },
+    {
+      "round": 10,
+      "pick": 3,
+      "overall": 39,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Rome Odunze",
+      "position": "WR",
+      "nfl_team": "CHI"
+    },
+    {
+      "round": 10,
+      "pick": 4,
+      "overall": 40,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Javonte Williams",
+      "position": "RB",
+      "nfl_team": "DAL"
+    },
+    {
+      "round": 11,
+      "pick": 1,
+      "overall": 41,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Brock Purdy",
+      "position": "QB",
+      "nfl_team": "SF"
+    },
+    {
+      "round": 11,
+      "pick": 2,
+      "overall": 42,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Evan McPherson",
+      "position": "K",
+      "nfl_team": "CIN"
+    },
+    {
+      "round": 11,
+      "pick": 4,
+      "overall": 44,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Brandon Aubrey",
+      "position": "K",
+      "nfl_team": "DAL"
+    },
+    {
+      "round": 12,
+      "pick": 1,
+      "overall": 45,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Chase Brown",
+      "position": "RB",
+      "nfl_team": "CIN"
+    },
+    {
+      "round": 12,
+      "pick": 2,
+      "overall": 46,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Lamar Jackson",
+      "position": "QB",
+      "nfl_team": "BAL"
+    },
+    {
+      "round": 12,
+      "pick": 4,
+      "overall": 48,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Tyler Bass",
+      "position": "K",
+      "nfl_team": "BUF"
+    },
+    {
+      "round": 13,
+      "pick": 1,
+      "overall": 49,
+      "team": "Team Ched",
+      "owner": "Ched",
+      "player": "Christian Watson",
+      "position": "WR",
+      "nfl_team": "GB"
+    },
+    {
+      "round": 13,
+      "pick": 4,
+      "overall": 52,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Parker Washington",
+      "position": "WR",
+      "nfl_team": "JAX"
+    },
+    {
+      "round": 14,
+      "pick": 1,
+      "overall": 53,
+      "team": "Team Mert",
+      "owner": "Mert",
+      "player": "Jayden Reed",
+      "position": "WR",
+      "nfl_team": "GB"
+    },
+    {
+      "round": 14,
+      "pick": 2,
+      "overall": 54,
+      "team": "Team Naesh",
+      "owner": "Naesh",
+      "player": "Harrison Butker",
+      "position": "K",
+      "nfl_team": "KC"
+    },
+    {
+      "round": 14,
+      "pick": 3,
+      "overall": 55,
+      "team": "Team JPI",
+      "owner": "JPI",
+      "player": "Kenneth Walker",
+      "position": "RB",
+      "nfl_team": "KC"
+    },
+    {
+      "round": 14,
+      "pick": 4,
+      "overall": 56,
+      "team": "Team Ched",
+      "owner": "Ched",
       "player": "James Cook",
       "position": "RB",
-      "team_abbr": "BUF"
-    },
-    {
-      "round": 15,
-      "pick": 6,
-      "overall": 118,
-      "team": "Team Zeta",
-      "player": "Jaden Nixon",
-      "position": "RB",
-      "team_abbr": "GB"
-    },
-    {
-      "round": 15,
-      "pick": 7,
-      "overall": 119,
-      "team": "Team Eta",
-      "player": "Drew Belcher",
-      "position": "TE",
-      "team_abbr": null
-    },
-    {
-      "round": 15,
-      "pick": 8,
-      "overall": 120,
-      "team": "Team Theta",
-      "player": "Calvin Tyler",
-      "position": "RB",
-      "team_abbr": null
+      "nfl_team": "BUF"
     }
   ],
   "rosters": {
-    "Team Alpha": [
+    "Ched": [
       {
-        "id": "12507",
-        "name": "Omarion Hampton",
+        "id": "12527",
+        "name": "Ashton Jeanty",
         "position": "RB",
-        "team": "LAC"
-      },
-      {
-        "id": "2320",
-        "name": "Melvin Gordon",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "1408",
-        "name": "Le'Veon Bell",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "8809",
-        "name": "Aaron Shampklin",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "5619",
-        "name": "Dalyn Dawkins",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "5143",
-        "name": "Demario Richard",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "1517",
-        "name": "Theo Riddick",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "14076",
-        "name": "Justin Jones",
-        "position": "RB",
-        "team": "SEA"
-      },
-      {
-        "id": "3453",
-        "name": "Josh Ferguson",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "2936",
-        "name": "Rasheed Williams",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "3211",
-        "name": "Paul Perkins",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "5398",
-        "name": "Justin Crawford",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "4038",
-        "name": "John Ross",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "3730",
-        "name": "Tevin Jones",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "2025",
-        "name": "Albert Wilson",
-        "position": "WR",
-        "team": null
-      }
-    ],
-    "Team Beta": [
-      {
-        "id": "6786",
-        "name": "CeeDee Lamb",
-        "position": "WR",
-        "team": "DAL"
-      },
-      {
-        "id": "11629",
-        "name": "Devontez Walker",
-        "position": "WR",
-        "team": "BAL"
-      },
-      {
-        "id": "12493",
-        "name": "Oronde Gadsden",
-        "position": "TE",
-        "team": "LAC"
-      },
-      {
-        "id": "13064",
-        "name": "Dorian Singer",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "12028",
-        "name": "TaMerik Williams",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "12848",
-        "name": "Josh Kelly",
-        "position": "WR",
-        "team": "HOU"
-      },
-      {
-        "id": "13352",
-        "name": "Lincoln Pare",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "12121",
-        "name": "Deshaun Fenwick",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "4385",
-        "name": "Kalif Phillips",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "12971",
-        "name": "Ke'Shawn Williams",
-        "position": "WR",
-        "team": "CIN"
-      },
-      {
-        "id": "11579",
-        "name": "Audric Estime",
-        "position": "RB",
-        "team": "NO"
-      },
-      {
-        "id": "10861",
-        "name": "Xazavian Valladay",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "7828",
-        "name": "Noah Gray",
-        "position": "TE",
-        "team": "KC"
-      },
-      {
-        "id": "8410",
-        "name": "Jequez Ezzard",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "12967",
-        "name": "Jacolby George",
-        "position": "WR",
-        "team": null
-      }
-    ],
-    "Team Gamma": [
-      {
-        "id": "11584",
-        "name": "Bucky Irving",
-        "position": "RB",
-        "team": "TB"
-      },
-      {
-        "id": "9487",
-        "name": "Parker Washington",
-        "position": "WR",
-        "team": "JAX"
-      },
-      {
-        "id": "11304",
-        "name": "E.J. Jenkins",
-        "position": "TE",
-        "team": "PHI"
-      },
-      {
-        "id": "8074",
-        "name": "Matt Seybert",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "2801",
-        "name": "DeAndrew White",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "13221",
-        "name": "Brett Gabbert",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "11522",
-        "name": "Jerome Kapp",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "3342",
-        "name": "Jakeem Grant",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "2359",
-        "name": "Ameer Abdullah",
-        "position": "RB",
-        "team": "JAX"
-      },
-      {
-        "id": "1684",
-        "name": "Jaron Brown",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "3294",
-        "name": "Dak Prescott",
-        "position": "QB",
-        "team": "DAL"
-      },
-      {
-        "id": "4992",
-        "name": "Dante Pettis",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "5052",
-        "name": "Ronald Jones",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "11282",
-        "name": "Johnny King",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "3916",
-        "name": "David Watford",
-        "position": "WR",
-        "team": null
-      }
-    ],
-    "Team Delta": [
-      {
-        "id": "13175",
-        "name": "Kinkead Dent",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "13295",
-        "name": "Behren Morton",
-        "position": "QB",
-        "team": "NE"
-      },
-      {
-        "id": "19",
-        "name": "Joe Flacco",
-        "position": "QB",
-        "team": "CIN"
-      },
-      {
-        "id": "1550",
-        "name": "Ryan Griffin",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "1895",
-        "name": "AJ McCarron",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "5428",
-        "name": "Ricky Jeune",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "7013",
-        "name": "Steven Montez",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "10233",
-        "name": "Max Duggan",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "6823",
-        "name": "Jacob Eason",
-        "position": "QB",
-        "team": null
-      },
-      {
-        "id": "5854",
-        "name": "Drew Lock",
-        "position": "QB",
-        "team": "SEA"
-      },
-      {
-        "id": "2023",
-        "name": "De'Anthony Thomas",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "5965",
-        "name": "Miles Boykin",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "4828",
-        "name": "Rashard Davis",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "4396",
-        "name": "Drew Morgan",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "7555",
-        "name": "Jamie Newman",
-        "position": "QB",
-        "team": null
-      }
-    ],
-    "Team Epsilon": [
-      {
-        "id": "11649",
-        "name": "Kendall Milton",
-        "position": "RB",
-        "team": "CIN"
-      },
-      {
-        "id": "9504",
-        "name": "Kayshon Boutte",
-        "position": "WR",
-        "team": "HOU"
-      },
-      {
-        "id": "13302",
-        "name": "Adam Randall",
-        "position": "RB",
-        "team": "BAL"
-      },
-      {
-        "id": "11616",
-        "name": "Jacob Cowing",
-        "position": "WR",
-        "team": "SF"
-      },
-      {
-        "id": "13600",
-        "name": "Tyren Montgomery",
-        "position": "WR",
-        "team": "TEN"
-      },
-      {
-        "id": "13323",
-        "name": "Rahsul Faison",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "11157",
-        "name": "Brycen Tremayne",
-        "position": "WR",
-        "team": "CAR"
-      },
-      {
-        "id": "13108",
-        "name": "Julian Fleming",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "2948",
-        "name": "Brandon Cottom",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "13409",
-        "name": "Donaven McCulley",
-        "position": "WR",
-        "team": "MIA"
-      },
-      {
-        "id": "13301",
-        "name": "Antonio Williams",
-        "position": "WR",
-        "team": "WAS"
-      },
-      {
-        "id": "8134",
-        "name": "Khalil Shakir",
-        "position": "WR",
-        "team": "BUF"
-      },
-      {
-        "id": "11636",
-        "name": "Johnny Wilson",
-        "position": "WR",
-        "team": "PHI"
+        "team": "LV",
+        "adp": 23.0,
+        "proj_pts": 16.43,
+        "age": 22,
+        "years_exp": 1
       },
       {
         "id": "12517",
         "name": "Colston Loveland",
         "position": "TE",
-        "team": "CHI"
+        "team": "CHI",
+        "adp": 28.0,
+        "proj_pts": 13.78,
+        "age": 22,
+        "years_exp": 1
+      },
+      {
+        "id": "11635",
+        "name": "Ladd McConkey",
+        "position": "WR",
+        "team": "LAC",
+        "adp": 47.0,
+        "proj_pts": 13.21,
+        "age": 24,
+        "years_exp": 2
+      },
+      {
+        "id": "9226",
+        "name": "De'Von Achane",
+        "position": "RB",
+        "team": "MIA",
+        "adp": 19.0,
+        "proj_pts": 16.57,
+        "age": 24,
+        "years_exp": 3
+      },
+      {
+        "id": "12514",
+        "name": "Emeka Egbuka",
+        "position": "WR",
+        "team": "TB",
+        "adp": 57.0,
+        "proj_pts": 12.57,
+        "age": 23,
+        "years_exp": 1
+      },
+      {
+        "id": "11564",
+        "name": "Drake Maye",
+        "position": "QB",
+        "team": "NE",
+        "adp": 49.0,
+        "proj_pts": 19.67,
+        "age": 24,
+        "years_exp": 2
+      },
+      {
+        "id": "11646",
+        "name": "Jalen Coker",
+        "position": "WR",
+        "team": "CAR",
+        "adp": 66.0,
+        "proj_pts": 11.91,
+        "age": 24,
+        "years_exp": 2
+      },
+      {
+        "id": "13287",
+        "name": "Jeremiyah Love",
+        "position": "RB",
+        "team": "ARI",
+        "adp": 68.0,
+        "proj_pts": 12.67,
+        "age": 21,
+        "years_exp": 0
+      },
+      {
+        "id": "7526",
+        "name": "Jaylen Waddle",
+        "position": "WR",
+        "team": "DEN",
+        "adp": 40.0,
+        "proj_pts": 14.32,
+        "age": 27,
+        "years_exp": 5
+      },
+      {
+        "id": "7588",
+        "name": "Javonte Williams",
+        "position": "RB",
+        "team": "DAL",
+        "adp": 12.0,
+        "proj_pts": 17.42,
+        "age": 26,
+        "years_exp": 5
+      },
+      {
+        "id": "8183",
+        "name": "Brock Purdy",
+        "position": "QB",
+        "team": "SF",
+        "adp": 72.0,
+        "proj_pts": 18.45,
+        "age": 26,
+        "years_exp": 4
+      },
+      {
+        "id": "7042",
+        "name": "Tyler Bass",
+        "position": "K",
+        "team": "BUF",
+        "adp": 999.0,
+        "proj_pts": 6.08,
+        "age": 29,
+        "years_exp": 6
+      },
+      {
+        "id": "8167",
+        "name": "Christian Watson",
+        "position": "WR",
+        "team": "GB",
+        "adp": 56.0,
+        "proj_pts": 12.59,
+        "age": 27,
+        "years_exp": 4
       },
       {
         "id": "8138",
         "name": "James Cook",
         "position": "RB",
-        "team": "BUF"
+        "team": "BUF",
+        "adp": 22.0,
+        "proj_pts": 16.47,
+        "age": 26,
+        "years_exp": 4
       }
     ],
-    "Team Zeta": [
+    "JPI": [
+      {
+        "id": "7564",
+        "name": "Ja'Marr Chase",
+        "position": "WR",
+        "team": "CIN",
+        "adp": 3.0,
+        "proj_pts": 20.37,
+        "age": 26,
+        "years_exp": 5
+      },
+      {
+        "id": "12481",
+        "name": "Cam Skattebo",
+        "position": "RB",
+        "team": "NYG",
+        "adp": 37.0,
+        "proj_pts": 15.33,
+        "age": 24,
+        "years_exp": 1
+      },
+      {
+        "id": "12518",
+        "name": "Tyler Warren",
+        "position": "TE",
+        "team": "IND",
+        "adp": 30.0,
+        "proj_pts": 13.76,
+        "age": 24,
+        "years_exp": 1
+      },
+      {
+        "id": "12519",
+        "name": "Luther Burden",
+        "position": "WR",
+        "team": "CHI",
+        "adp": 48.0,
+        "proj_pts": 13.12,
+        "age": 22,
+        "years_exp": 1
+      },
+      {
+        "id": "8155",
+        "name": "Breece Hall",
+        "position": "RB",
+        "team": "NYJ",
+        "adp": 35.0,
+        "proj_pts": 15.59,
+        "age": 25,
+        "years_exp": 4
+      },
+      {
+        "id": "9997",
+        "name": "Zay Flowers",
+        "position": "WR",
+        "team": "BAL",
+        "adp": 21.0,
+        "proj_pts": 15.61,
+        "age": 26,
+        "years_exp": 3
+      },
+      {
+        "id": "6904",
+        "name": "Jalen Hurts",
+        "position": "QB",
+        "team": "PHI",
+        "adp": 17.0,
+        "proj_pts": 22.75,
+        "age": 28,
+        "years_exp": 6
+      },
+      {
+        "id": "8146",
+        "name": "Garrett Wilson",
+        "position": "WR",
+        "team": "NYJ",
+        "adp": 34.0,
+        "proj_pts": 14.82,
+        "age": 26,
+        "years_exp": 4
+      },
+      {
+        "id": "8148",
+        "name": "Jameson Williams",
+        "position": "WR",
+        "team": "DET",
+        "adp": 41.0,
+        "proj_pts": 14.15,
+        "age": 25,
+        "years_exp": 4
+      },
+      {
+        "id": "11620",
+        "name": "Rome Odunze",
+        "position": "WR",
+        "team": "CHI",
+        "adp": 82.0,
+        "proj_pts": 11.17,
+        "age": 24,
+        "years_exp": 2
+      },
+      {
+        "id": "7839",
+        "name": "Evan McPherson",
+        "position": "K",
+        "team": "CIN",
+        "adp": 999.0,
+        "proj_pts": 6.84,
+        "age": 27,
+        "years_exp": 5
+      },
+      {
+        "id": "8151",
+        "name": "Kenneth Walker",
+        "position": "RB",
+        "team": "KC",
+        "adp": 50.0,
+        "proj_pts": 13.74,
+        "age": 25,
+        "years_exp": 4
+      }
+    ],
+    "Naesh": [
+      {
+        "id": "11632",
+        "name": "Malik Nabers",
+        "position": "WR",
+        "team": "NYG",
+        "adp": 26.0,
+        "proj_pts": 15.42,
+        "age": 23,
+        "years_exp": 2
+      },
+      {
+        "id": "12507",
+        "name": "Omarion Hampton",
+        "position": "RB",
+        "team": "LAC",
+        "adp": 31.0,
+        "proj_pts": 16.0,
+        "age": 23,
+        "years_exp": 1
+      },
+      {
+        "id": "11584",
+        "name": "Bucky Irving",
+        "position": "RB",
+        "team": "TB",
+        "adp": 43.0,
+        "proj_pts": 14.65,
+        "age": 24,
+        "years_exp": 2
+      },
+      {
+        "id": "7547",
+        "name": "Amon-Ra St. Brown",
+        "position": "WR",
+        "team": "DET",
+        "adp": 4.0,
+        "proj_pts": 20.2,
+        "age": 26,
+        "years_exp": 5
+      },
+      {
+        "id": "9488",
+        "name": "Jaxon Smith-Njigba",
+        "position": "WR",
+        "team": "SEA",
+        "adp": 5.0,
+        "proj_pts": 19.69,
+        "age": 24,
+        "years_exp": 3
+      },
+      {
+        "id": "12506",
+        "name": "Harold Fannin",
+        "position": "TE",
+        "team": "CLE",
+        "adp": 64.0,
+        "proj_pts": 10.54,
+        "age": 22,
+        "years_exp": 1
+      },
+      {
+        "id": "6770",
+        "name": "Joe Burrow",
+        "position": "QB",
+        "team": "CIN",
+        "adp": 36.0,
+        "proj_pts": 21.34,
+        "age": 29,
+        "years_exp": 6
+      },
+      {
+        "id": "8137",
+        "name": "George Pickens",
+        "position": "WR",
+        "team": "DAL",
+        "adp": 25.0,
+        "proj_pts": 15.55,
+        "age": 25,
+        "years_exp": 4
+      },
+      {
+        "id": "8112",
+        "name": "Drake London",
+        "position": "WR",
+        "team": "ATL",
+        "adp": 42.0,
+        "proj_pts": 14.1,
+        "age": 25,
+        "years_exp": 4
+      },
+      {
+        "id": "10229",
+        "name": "Rashee Rice",
+        "position": "WR",
+        "team": "KC",
+        "adp": 51.0,
+        "proj_pts": 12.81,
+        "age": 26,
+        "years_exp": 3
+      },
+      {
+        "id": "4881",
+        "name": "Lamar Jackson",
+        "position": "QB",
+        "team": "BAL",
+        "adp": 46.0,
+        "proj_pts": 19.96,
+        "age": 29,
+        "years_exp": 8
+      },
+      {
+        "id": "4227",
+        "name": "Harrison Butker",
+        "position": "K",
+        "team": "KC",
+        "adp": 999.0,
+        "proj_pts": 6.39,
+        "age": 31,
+        "years_exp": 9
+      }
+    ],
+    "Mert": [
+      {
+        "id": "9221",
+        "name": "Jahmyr Gibbs",
+        "position": "RB",
+        "team": "DET",
+        "adp": 1.0,
+        "proj_pts": 22.1,
+        "age": 24,
+        "years_exp": 3
+      },
+      {
+        "id": "12526",
+        "name": "Tetairoa McMillan",
+        "position": "WR",
+        "team": "CAR",
+        "adp": 33.0,
+        "proj_pts": 14.9,
+        "age": 23,
+        "years_exp": 1
+      },
+      {
+        "id": "8130",
+        "name": "Trey McBride",
+        "position": "TE",
+        "team": "ARI",
+        "adp": 20.0,
+        "proj_pts": 14.25,
+        "age": 26,
+        "years_exp": 4
+      },
+      {
+        "id": "9509",
+        "name": "Bijan Robinson",
+        "position": "RB",
+        "team": "ATL",
+        "adp": 7.0,
+        "proj_pts": 19.21,
+        "age": 24,
+        "years_exp": 3
+      },
+      {
+        "id": "7569",
+        "name": "Nico Collins",
+        "position": "WR",
+        "team": "HOU",
+        "adp": 13.0,
+        "proj_pts": 16.45,
+        "age": 27,
+        "years_exp": 5
+      },
+      {
+        "id": "12508",
+        "name": "Jaxson Dart",
+        "position": "QB",
+        "team": "NYG",
+        "adp": 32.0,
+        "proj_pts": 21.71,
+        "age": 23,
+        "years_exp": 1
+      },
+      {
+        "id": "7525",
+        "name": "DeVonta Smith",
+        "position": "WR",
+        "team": "PHI",
+        "adp": 11.0,
+        "proj_pts": 16.66,
+        "age": 27,
+        "years_exp": 5
+      },
+      {
+        "id": "8144",
+        "name": "Chris Olave",
+        "position": "WR",
+        "team": "NO",
+        "adp": 16.0,
+        "proj_pts": 16.13,
+        "age": 26,
+        "years_exp": 4
+      },
+      {
+        "id": "10859",
+        "name": "Sam LaPorta",
+        "position": "TE",
+        "team": "DET",
+        "adp": 29.0,
+        "proj_pts": 13.77,
+        "age": 25,
+        "years_exp": 3
+      },
+      {
+        "id": "11560",
+        "name": "Caleb Williams",
+        "position": "QB",
+        "team": "CHI",
+        "adp": 79.0,
+        "proj_pts": 18.08,
+        "age": 24,
+        "years_exp": 2
+      },
       {
         "id": "11533",
         "name": "Brandon Aubrey",
         "position": "K",
-        "team": "DAL"
+        "team": "DAL",
+        "adp": 999.0,
+        "proj_pts": 6.84,
+        "age": 31,
+        "years_exp": 3
       },
       {
-        "id": "6918",
-        "name": "Salvon Ahmed",
+        "id": "9224",
+        "name": "Chase Brown",
         "position": "RB",
-        "team": "CHI"
+        "team": "CIN",
+        "adp": 14.0,
+        "proj_pts": 17.09,
+        "age": 26,
+        "years_exp": 3
       },
       {
-        "id": "12699",
-        "name": "LaJohntay Wester",
+        "id": "9487",
+        "name": "Parker Washington",
         "position": "WR",
-        "team": "BAL"
+        "team": "JAX",
+        "adp": 59.0,
+        "proj_pts": 12.18,
+        "age": 24,
+        "years_exp": 3
       },
       {
-        "id": "1387",
-        "name": "Rex Burkhead",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "4054",
-        "name": "Mo Alie-Cox",
-        "position": "TE",
-        "team": "IND"
-      },
-      {
-        "id": "3496",
-        "name": "Stephen Anderson",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "6908",
-        "name": "La'Mical Perine",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "8698",
-        "name": "Jake Tonges",
-        "position": "TE",
-        "team": "SF"
-      },
-      {
-        "id": "788",
-        "name": "Dion Lewis",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "7585",
-        "name": "Davis Mills",
-        "position": "QB",
-        "team": "HOU"
-      },
-      {
-        "id": "7614",
-        "name": "Darius Clark",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "421",
-        "name": "Matthew Stafford",
-        "position": "QB",
-        "team": "LAR"
-      },
-      {
-        "id": "13898",
-        "name": "Corey Rucker",
+        "id": "10222",
+        "name": "Jayden Reed",
         "position": "WR",
-        "team": "LV"
-      },
-      {
-        "id": "12925",
-        "name": "Jamaal Pritchett",
-        "position": "WR",
-        "team": "NYJ"
-      },
-      {
-        "id": "13906",
-        "name": "Jaden Nixon",
-        "position": "RB",
-        "team": "GB"
-      }
-    ],
-    "Team Eta": [
-      {
-        "id": "6462",
-        "name": "Ellis Richardson",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "7553",
-        "name": "Kyle Pitts",
-        "position": "TE",
-        "team": "ATL"
-      },
-      {
-        "id": "7926",
-        "name": "Carl Tucker",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "7918",
-        "name": "A.J. Rose",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "1800",
-        "name": "Jordan Matthews",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "801",
-        "name": "Charles Clay",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "2474",
-        "name": "Nick Boyle",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "6016",
-        "name": "Dax Raymond",
-        "position": "TE",
-        "team": "PIT"
-      },
-      {
-        "id": "6279",
-        "name": "Brandon Dillon",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "3561",
-        "name": "Bryce Williams",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "11155",
-        "name": "Christian Sims",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "5718",
-        "name": "Ryan Yurachek",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "12300",
-        "name": "Joshua Lingenfelter",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "4421",
-        "name": "Jacob Hollister",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "6374",
-        "name": "Drew Belcher",
-        "position": "TE",
-        "team": null
-      }
-    ],
-    "Team Theta": [
-      {
-        "id": "6783",
-        "name": "Jerry Jeudy",
-        "position": "WR",
-        "team": "CLE"
-      },
-      {
-        "id": "11439",
-        "name": "Jaleel McLaughlin",
-        "position": "RB",
-        "team": "DEN"
-      },
-      {
-        "id": "5122",
-        "name": "Boston Scott",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "5038",
-        "name": "Michael Gallup",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "5100",
-        "name": "Jordan Wilkins",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "3488",
-        "name": "D.J. Foster",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "8116",
-        "name": "Pierre Strong",
-        "position": "RB",
-        "team": "GB"
-      },
-      {
-        "id": "6137",
-        "name": "Tommy Sweeney",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "5007",
-        "name": "Keke Coutee",
-        "position": "WR",
-        "team": null
-      },
-      {
-        "id": "7593",
-        "name": "Trey Sermon",
-        "position": "RB",
-        "team": "ATL"
-      },
-      {
-        "id": "6966",
-        "name": "Javon Leake",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "4548",
-        "name": "Joel Bouagnon",
-        "position": "RB",
-        "team": null
-      },
-      {
-        "id": "5995",
-        "name": "Justice Hill",
-        "position": "RB",
-        "team": "BAL"
-      },
-      {
-        "id": "14017",
-        "name": "Brett Weaver",
-        "position": "TE",
-        "team": null
-      },
-      {
-        "id": "11229",
-        "name": "Calvin Tyler",
-        "position": "RB",
-        "team": null
+        "team": "GB",
+        "adp": 60.0,
+        "proj_pts": 12.08,
+        "age": 26,
+        "years_exp": 3
       }
     ]
   }

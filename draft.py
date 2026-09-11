@@ -5,6 +5,7 @@ import anthropic
 from players import get_nfl_players
 
 from grade import grade_player_draft, fetch_current_projections, fetch_all_players, adp_to_grade, get_experience_bucket, get_age_multiplier
+from grade import grade_player_draft, fetch_current_projections, fetch_all_players, adp_to_grade, get_experience_bucket, get_age_multiplier, fetch_bye_weeks
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
@@ -101,7 +102,7 @@ def get_roster_summary(roster):
     
     return counts, needs
 
-def agent_pick(agent, available_players, roster, pick_number, round_num, projections=None, all_players_meta=None):
+def agent_pick(agent, available_players, roster, pick_number, round_num, projections=None, all_players_meta=None, bye_weeks=None):
     """Ask Claude to make a pick with enriched player data"""
 
     # Build enriched available players list with grades
@@ -149,11 +150,14 @@ def agent_pick(agent, available_players, roster, pick_number, round_num, project
         proj = signal.get("proj_pts", 0)
         proj_season = round(proj * 17, 1) if proj else "N/A"
         
+        bye = bye_weeks.get(p['team'], '?') if bye_weeks else '?'
         line = (f"- {p['name']} ({p['position']} - {p['team']}) "
                 f"| Grade: {grade} | ADP: {adp} "
                 f"| Proj season pts: {proj_season} "
                 f"| Age: {age} ({bucket}) "
-                f"| Age factor: {age_mult:.2f}")
+                f"| Age factor: {age_mult:.2f} "
+                f"| Bye: Wk {bye}")
+
         available_lines.append((grade, line))
     
     # Sort by grade descending
@@ -202,19 +206,33 @@ Respond with ONLY the player's exact full name, nothing else."""
     return message.content[0].text.strip()
 
 def find_player_by_name(name, available_players):
-    """Find a player by name with fuzzy matching"""
-    name_lower = name.lower().strip()
-    
-    # Exact match first
+    """Find a player by name with aggressive fuzzy matching"""
+    def normalize(s):
+        # Replace all dash variants with space, remove special chars
+        s = s.replace('–', ' ').replace('—', ' ').replace('-', ' ')
+        s = ''.join(c.lower() for c in s if c.isalnum() or c == ' ')
+        return ' '.join(s.split())  # normalize whitespace
+
+    name_norm = normalize(name)
+
+    # Exact normalized match
     for player_id, player in available_players.items():
-        if player['name'].lower() == name_lower:
+        if normalize(player['name']) == name_norm:
             return player_id, player
-    
-    # Partial match
+
+    # Partial normalized match
     for player_id, player in available_players.items():
-        if name_lower in player['name'].lower() or player['name'].lower() in name_lower:
+        pname = normalize(player['name'])
+        if name_norm in pname or pname in name_norm:
             return player_id, player
-    
+
+    # Word overlap — at least 2 words match
+    name_words = set(name_norm.split())
+    for player_id, player in available_players.items():
+        pname_words = set(normalize(player['name']).split())
+        if len(name_words & pname_words) >= 2:
+            return player_id, player
+
     return None, None
 
 def run_draft():
@@ -227,6 +245,7 @@ def run_draft():
     projections = fetch_current_projections("2026", 1)
     all_players_meta = fetch_all_players()
     print(f"✅ Got {len(projections)} player projections")
+    bye_weeks = fetch_bye_weeks(2026)    
     
     print("🏈 Loading NFL players...")
     all_players = get_nfl_players()
@@ -241,6 +260,9 @@ def run_draft():
     print(f"4 Teams | 14 Rounds | PPR Scoring | Standard Waivers")
     print("=" * 60)
 
+    pos_counts = {i: {"QB": 0, "RB": 0, "WR": 0, "TE": 0, "K": 0} for i in range(NUM_TEAMS)}
+    pos_limits = {"QB": 3, "RB": 8, "WR": 10, "TE": 3, "K": 2}
+    
     for pick_num, team_idx in enumerate(pick_order):
         agent = AGENTS[team_idx]
         round_num = pick_num // NUM_TEAMS + 1
@@ -255,7 +277,8 @@ def run_draft():
             pick_num + 1,
             round_num,
             projections=projections,
-            all_players_meta=all_players_meta
+            all_players_meta=all_players_meta,
+            bye_weeks=bye_weeks
         )
 
         print(f"  → Claude chose: {picked_name}")
@@ -263,10 +286,16 @@ def run_draft():
         player_id, player = find_player_by_name(picked_name, available_players)
 
         if player:
-            rosters[team_idx].append(player)
-            del available_players[player_id]
-            print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
-            draft_results.append({
+            pos = player['position']
+            if pos_counts[team_idx].get(pos, 0) >= pos_limits.get(pos, 99):
+                print(f"  ⚠️ Position limit reached for {pos} — skipping")
+            else:
+                rosters[team_idx].append(player)
+                del available_players[player_id]
+                pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1
+
+                print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
+                draft_results.append({
                 "round": round_num,
                 "pick": pick_in_round,
                 "overall": pick_num + 1,
