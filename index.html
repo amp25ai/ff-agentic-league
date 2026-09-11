@@ -751,18 +751,18 @@
             const ptsColor = hasActual ? '#3fb950' : '#8b949e';
             if (side === 'left') {
                 return `
-                    <td style="padding:10px 8px;text-align:right;">
-                        <div style="font-size:13px;font-weight:600;">${player.name}</div>
-                        <div style="font-size:11px;color:#8b949e;">${player.nfl_team}</div>
+                    <td style="padding:8px 6px;text-align:right;">
+                        <div style="font-size:12px;font-weight:600;word-break:break-word;">${player.name}</div>
+                        <div style="font-size:10px;color:#8b949e;">${player.nfl_team}</div>
                     </td>
-                    <td style="padding:10px 4px;text-align:right;font-size:14px;font-weight:700;color:${ptsColor};">${pts}</td>
+                    <td style="padding:8px 4px;text-align:right;font-size:13px;font-weight:700;color:${ptsColor};white-space:nowrap;">${pts}</td>
                 `;
             } else {
                 return `
-                    <td style="padding:10px 4px;text-align:left;font-size:14px;font-weight:700;color:${ptsColor};">${pts}</td>
-                    <td style="padding:10px 8px;text-align:left;">
-                        <div style="font-size:13px;font-weight:600;">${player.name}</div>
-                        <div style="font-size:11px;color:#8b949e;">${player.nfl_team}</div>
+                    <td style="padding:8px 4px;text-align:left;font-size:13px;font-weight:700;color:${ptsColor};white-space:nowrap;">${pts}</td>
+                    <td style="padding:8px 6px;text-align:left;">
+                        <div style="font-size:12px;font-weight:600;word-break:break-word;">${player.name}</div>
+                        <div style="font-size:10px;color:#8b949e;">${player.nfl_team}</div>
                     </td>
                 `;
             }
@@ -826,13 +826,20 @@
                 <!-- PLAYER ROWS -->
                 <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;overflow:hidden;">
                     <table style="width:100%;border-collapse:collapse;">
+                        <colgroup>
+                            <col style="width:35%">
+                            <col style="width:12%">
+                            <col style="width:6%">
+                            <col style="width:12%">
+                            <col style="width:35%">
+                        </colgroup>
                         <thead>
                             <tr style="border-bottom:2px solid #30363d;background:#21262d;">
-                                <th style="padding:10px 8px;font-size:11px;color:#8b949e;text-align:right;">${home.team}</th>
-                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:right;">PTS</th>
-                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:center;">POS</th>
-                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:left;">PTS</th>
-                                <th style="padding:10px 8px;font-size:11px;color:#8b949e;text-align:left;">${away.team}</th>
+                                <th style="padding:8px 6px;font-size:11px;color:#8b949e;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${home.team}</th>
+                                <th style="padding:8px 4px;font-size:11px;color:#8b949e;text-align:right;">PTS</th>
+                                <th style="padding:8px 4px;font-size:11px;color:#8b949e;text-align:center;">POS</th>
+                                <th style="padding:8px 4px;font-size:11px;color:#8b949e;text-align:left;">PTS</th>
+                                <th style="padding:8px 6px;font-size:11px;color:#8b949e;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${away.team}</th>
                             </tr>
                         </thead>
                         <tbody>
