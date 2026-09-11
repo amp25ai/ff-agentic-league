@@ -106,7 +106,10 @@ def agent_pick(agent, available_players, roster, pick_number, round_num, project
     """Ask Claude to make a pick with enriched player data"""
 
     # Build enriched available players list with grades
-    top_available = list(available_players.values())[:40]
+    all_players_list = list(available_players.values())
+    kickers = [p for p in all_players_list if p['position'] == 'K'][:3]
+    non_kickers = [p for p in all_players_list if p['position'] != 'K'][:40]
+    top_available = non_kickers + kickers
     
     available_lines = []
     for p in top_available:
@@ -203,7 +206,12 @@ Respond with ONLY the player's exact full name, nothing else."""
         messages=[{"role": "user", "content": prompt}]
     )
     
-    return message.content[0].text.strip()
+    response = message.content[0].text.strip()
+    first_line = response.split('\n')[0].strip()
+    for prefix in ["I'll pick ", "I choose ", "My pick is ", "Selecting ", "I'll take "]:
+        if first_line.lower().startswith(prefix.lower()):
+            first_line = first_line[len(prefix):]
+    return first_line.strip()
 
 def find_player_by_name(name, available_players):
     """Find a player by name with aggressive fuzzy matching"""
@@ -289,7 +297,7 @@ def run_draft():
             pos = player['position']
             if pos_counts[team_idx].get(pos, 0) >= pos_limits.get(pos, 99):
                 print(f"  ⚠️ Position limit reached for {pos} — finding next best")
-                # Find next best available player at a different position
+                found_alt = False
                 for alt_player_id, alt_player in available_players.items():
                     alt_pos = alt_player['position']
                     if pos_counts[team_idx].get(alt_pos, 0) < pos_limits.get(alt_pos, 99):
@@ -297,21 +305,20 @@ def run_draft():
                         player_id = alt_player_id
                         pos = alt_pos
                         print(f"  → Switching to {player['name']} ({pos})")
+                        found_alt = True
                         break
-                else:
+                if not found_alt:
                     print(f"  ⚠️ No valid pick found — skipping")
                     continue
-                    
-                rosters[team_idx].append(player)
-                del available_players[player_id]
-                pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1
 
-                print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
-                #Auto-push after every complete round so dashboard updates live
-                if pick_num % NUM_TEAMS == (NUM_TEAMS - 1):
-                    os.system(f'git add draft_results.json && git commit -m "Draft: Round {round_num} complete" && git push 2>/dev/null')
-                    print(f"  📤 Round {round_num} pushed to GitHub")
-                draft_results.append({
+            rosters[team_idx].append(player)
+            del available_players[player_id]
+            pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1
+            print(f"  ✅ {agent['owner']} drafts {player['name']} ({player['position']} - {player['team']})")
+            if pick_num % NUM_TEAMS == (NUM_TEAMS - 1):
+                os.system(f'git add draft_results.json && git commit -m "Draft: Round {round_num} complete" && git push 2>/dev/null')
+                print(f"  📤 Round {round_num} pushed to GitHub")
+            draft_results.append({
                 "round": round_num,
                 "pick": pick_in_round,
                 "overall": pick_num + 1,
@@ -322,7 +329,26 @@ def run_draft():
                 "nfl_team": player['team']
             })
         else:
-            print(f"  ⚠️ Could not find '{picked_name}' - skipping")
+            print(f"  ⚠️ Could not find '{picked_name}' - retrying with best available")
+            if available_players:
+                fallback = list(available_players.values())[0]
+                fallback_id = list(available_players.keys())[0]
+                pos = fallback['position']
+                if pos_counts[team_idx].get(pos, 0) < pos_limits.get(pos, 99):
+                    rosters[team_idx].append(fallback)
+                    del available_players[fallback_id]
+                    pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1
+                    print(f"  ✅ {agent['owner']} drafts {fallback['name']} ({fallback['position']} - {fallback['team']}) [fallback]")
+                    draft_results.append({
+                        "round": round_num,
+                        "pick": pick_in_round,
+                        "overall": pick_num + 1,
+                        "team": agent['name'],
+                        "owner": agent['owner'],
+                        "player": fallback['name'],
+                        "position": fallback['position'],
+                        "nfl_team": fallback['team']
+                    })
 
     with open("draft_results.json", "w") as f:
         json.dump({
