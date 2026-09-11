@@ -814,9 +814,9 @@
                                         <!-- WIN PROBABILITY BAR -->
                     <div style="margin-top:12px;">
                         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                            <span style="font-size:12px;font-weight:700;color:#58a6ff;">${home.team} ${homeWinProb}%</span>
+                            <span style="font-size:12px;font-weight:700;color:#58a6ff;">${homeWinProb}%</span>
                             <span style="font-size:11px;color:#8b949e;">WIN PROB</span>
-                            <span style="font-size:12px;font-weight:700;color:#bc8cff;">${awayWinProb}% ${away.team}</span>
+                            <span style="font-size:12px;font-weight:700;color:#bc8cff;">${awayWinProb}%</span>
                         </div>
                         <div style="background:#21262d;border-radius:20px;height:10px;overflow:hidden;">
                             <div style="height:100%;width:${homeWinProb}%;background:#58a6ff;border-radius:20px 0 0 20px;transition:width 0.5s;"></div>
@@ -975,6 +975,7 @@
         const totalPages = Math.ceil(transactions.length / TRANSACTIONS_PER_PAGE);
         const start = transactionPage * TRANSACTIONS_PER_PAGE;
         const end = start + TRANSACTIONS_PER_PAGE;
+        transactions.reverse();
         const paginated = transactions.slice(start, end);
 
         // Color map
