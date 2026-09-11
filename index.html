@@ -805,71 +805,138 @@
         grid.innerHTML = navHtml + matchupsHtml;
     }
 
-    function showMatchupDetail(idx, matchup) {
+        function showMatchupDetail(idx, matchup) {
         selectedMatchup = matchup;
-        // Switch to matchup detail view
         const grid = document.getElementById('matchupsGrid');
 
-        function playerRow(p) {
-            const isStarter = p.is_starter;
-            const hasActual = p.actual > 0;
-            return `
-                <tr style="border-bottom:1px solid #21262d;${!isStarter ? 'opacity:0.5' : ''}">
-                    <td style="padding:8px 12px;">
-                        <span class="position-badge pos-${p.position}">${p.position}</span>
+        const home = matchup.home;
+        const away = matchup.away;
+
+        // Calculate win probability based on projected totals
+        const totalProj = (home.total_projected || 0) + (away.total_projected || 0);
+        const homeWinProb = totalProj > 0 ? Math.round((home.total_projected / totalProj) * 100) : 50;
+        const awayWinProb = 100 - homeWinProb;
+
+        // Determine leader
+        const homeActual = home.total_actual || 0;
+        const awayActual = away.total_actual || 0;
+        const homeLeading = homeActual > awayActual;
+        const tied = homeActual === awayActual;
+
+        // Build player rows — match starters by slot order
+        const homeStarters = (home.starters || []);
+        const awayStarters = (away.starters || []);
+        const homeBench = (home.bench || []);
+        const awayBench = (away.bench || []);
+
+        const maxStarters = Math.max(homeStarters.length, awayStarters.length);
+        const maxBench = Math.max(homeBench.length, awayBench.length);
+
+        function playerCell(player, side) {
+            if (!player) return `<td style="padding:10px 8px;"></td>`;
+            const hasActual = player.actual > 0;
+            const pts = hasActual ? player.actual.toFixed(1) : `Proj ${player.projected.toFixed(1)}`;
+            const ptsColor = hasActual ? '#3fb950' : '#8b949e';
+            if (side === 'left') {
+                return `
+                    <td style="padding:10px 8px;text-align:right;">
+                        <div style="font-size:13px;font-weight:600;">${player.name}</div>
+                        <div style="font-size:11px;color:#8b949e;">${player.nfl_team}</div>
                     </td>
-                    <td style="padding:8px 12px;font-size:13px;font-weight:${isStarter ? '600' : '400'}">
-                        ${p.name} ${isStarter ? '' : '<span style="font-size:10px;color:#8b949e">(bench)</span>'}
+                    <td style="padding:10px 4px;text-align:right;font-size:14px;font-weight:700;color:${ptsColor};">${pts}</td>
+                `;
+            } else {
+                return `
+                    <td style="padding:10px 4px;text-align:left;font-size:14px;font-weight:700;color:${ptsColor};">${pts}</td>
+                    <td style="padding:10px 8px;text-align:left;">
+                        <div style="font-size:13px;font-weight:600;">${player.name}</div>
+                        <div style="font-size:11px;color:#8b949e;">${player.nfl_team}</div>
                     </td>
-                    <td style="padding:8px 12px;font-size:12px;color:#8b949e">${p.nfl_team}</td>
-                    <td style="padding:8px 12px;font-size:13px;color:#8b949e;text-align:right">${p.projected.toFixed(1)}</td>
-                    <td style="padding:8px 12px;font-size:13px;color:${hasActual ? '#3fb950' : '#8b949e'};font-weight:${hasActual ? '700' : '400'};text-align:right">
-                        ${hasActual ? p.actual.toFixed(1) : '—'}
-                    </td>
-                </tr>
-            `;
+                `;
+            }
         }
 
-        function teamTable(team) {
-            const starters = team.starters || [];
-            const bench = team.bench || [];
-            const allPlayers = [...starters, ...bench];
-            return `
-                <div style="flex:1;min-width:0;">
-                    <div style="font-weight:700;font-size:15px;color:#58a6ff;margin-bottom:4px;">${team.team}</div>
-                    <div style="font-size:12px;color:#8b949e;margin-bottom:12px;">${team.owner}</div>
-                    <table style="width:100%;border-collapse:collapse;">
-                        <thead>
-                            <tr style="border-bottom:1px solid #30363d;">
-                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">POS</th>
-                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">PLAYER</th>
-                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">NFL</th>
-                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:right">PROJ</th>
-                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:right">ACTUAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${allPlayers.map(playerRow).join('')}
-                        </tbody>
-                        <tfoot>
-                            <tr style="border-top:2px solid #30363d;">
-                                <td colspan="3" style="padding:10px 12px;font-weight:700;font-size:14px;">TOTAL</td>
-                                <td style="padding:10px 12px;font-size:14px;color:#8b949e;text-align:right;font-weight:700">${team.total_projected.toFixed(1)}</td>
-                                <td style="padding:10px 12px;font-size:14px;color:#3fb950;text-align:right;font-weight:700">${team.total_actual > 0 ? team.total_actual.toFixed(1) : '—'}</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            `;
+        function buildRows(leftPlayers, rightPlayers, isBench) {
+            const max = Math.max(leftPlayers.length, rightPlayers.length);
+            return Array.from({length: max}, (_, i) => {
+                const lp = leftPlayers[i];
+                const rp = rightPlayers[i];
+                const pos = lp?.position || rp?.position || '';
+                const rowBg = isBench ? 'opacity:0.55;' : '';
+                return `
+                    <tr style="border-bottom:1px solid #21262d;${rowBg}">
+                        ${playerCell(lp, 'left')}
+                        <td style="padding:10px 4px;text-align:center;">
+                            <span class="position-badge pos-${pos}">${pos}</span>
+                        </td>
+                        ${playerCell(rp, 'right')}
+                    </tr>
+                `;
+            }).join('');
         }
 
         grid.innerHTML = `
             <div style="grid-column:1/-1;">
                 <button onclick="loadMatchups()" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:16px;">← Back to Week ${currentWeek}</button>
-                <div style="display:flex;gap:24px;flex-wrap:wrap;flex-direction:column;">
-                    ${teamTable(matchup.home)}
-                    <div style="width:1px;background:#30363d;align-self:stretch;"></div>
-                    ${teamTable(matchup.away)}
+
+                <!-- HEADER -->
+                <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <div style="text-align:left;flex:1;">
+                            <div style="font-size:13px;color:#8b949e;">${home.owner}</div>
+                            <div style="font-size:22px;font-weight:700;color:${homeLeading && !tied ? '#3fb950' : '#e6edf3'};">${home.team}</div>
+                            <div style="font-size:28px;font-weight:800;color:${homeLeading && !tied ? '#3fb950' : '#58a6ff'};">${homeActual > 0 ? homeActual.toFixed(1) : '—'}</div>
+                            <div style="font-size:12px;color:#8b949e;">Proj ${home.total_projected.toFixed(1)}</div>
+                        </div>
+                        <div style="text-align:center;padding:0 16px;">
+                            <div style="font-size:11px;color:#8b949e;margin-bottom:4px;">WIN PROB</div>
+                            <div style="font-size:13px;font-weight:700;color:#58a6ff;">${homeWinProb}% - ${awayWinProb}%</div>
+                        </div>
+                        <div style="text-align:right;flex:1;">
+                            <div style="font-size:13px;color:#8b949e;">${away.owner}</div>
+                            <div style="font-size:22px;font-weight:700;color:${!homeLeading && !tied ? '#3fb950' : '#e6edf3'};">${away.team}</div>
+                            <div style="font-size:28px;font-weight:800;color:${!homeLeading && !tied ? '#3fb950' : '#58a6ff'};">${awayActual > 0 ? awayActual.toFixed(1) : '—'}</div>
+                            <div style="font-size:12px;color:#8b949e;">Proj ${away.total_projected.toFixed(1)}</div>
+                        </div>
+                    </div>
+
+                    <!-- WIN PROBABILITY BAR -->
+                    <div style="background:#21262d;border-radius:4px;height:8px;overflow:hidden;">
+                        <div style="height:100%;width:${homeWinProb}%;background:linear-gradient(90deg,#58a6ff,#3fb950);border-radius:4px;"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+                        <span style="font-size:11px;color:#8b949e;">${homeWinProb}%</span>
+                        <span style="font-size:11px;color:#8b949e;">${awayWinProb}%</span>
+                    </div>
+                </div>
+
+                <!-- PLAYER ROWS -->
+                <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;overflow:hidden;">
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="border-bottom:2px solid #30363d;background:#21262d;">
+                                <th style="padding:10px 8px;font-size:11px;color:#8b949e;text-align:right;">${home.team}</th>
+                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:right;">PTS</th>
+                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:center;">POS</th>
+                                <th style="padding:10px 4px;font-size:11px;color:#8b949e;text-align:left;">PTS</th>
+                                <th style="padding:10px 8px;font-size:11px;color:#8b949e;text-align:left;">${away.team}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${buildRows(homeStarters, awayStarters, false)}
+                            <tr style="background:#21262d;">
+                                <td colspan="5" style="padding:6px 12px;font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px;">Bench</td>
+                            </tr>
+                            ${buildRows(homeBench, awayBench, true)}
+                            <tr style="border-top:2px solid #30363d;background:#21262d;">
+                                <td style="padding:12px 8px;font-weight:700;text-align:right;">TOTAL</td>
+                                <td style="padding:12px 4px;font-weight:700;color:#3fb950;text-align:right;">${homeActual > 0 ? homeActual.toFixed(1) : home.total_projected.toFixed(1)}</td>
+                                <td></td>
+                                <td style="padding:12px 4px;font-weight:700;color:#3fb950;text-align:left;">${awayActual > 0 ? awayActual.toFixed(1) : away.total_projected.toFixed(1)}</td>
+                                <td style="padding:12px 8px;font-weight:700;text-align:left;">TOTAL</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         `;
