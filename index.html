@@ -866,7 +866,7 @@
         grid.innerHTML = `
             <div style="grid-column:1/-1;">
                 <button onclick="loadMatchups()" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:16px;">← Back to Week ${currentWeek}</button>
-                <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                <div style="display:flex;gap:24px;flex-wrap:wrap;flex-direction:column;">
                     ${teamTable(matchup.home)}
                     <div style="width:1px;background:#30363d;align-self:stretch;"></div>
                     ${teamTable(matchup.away)}
