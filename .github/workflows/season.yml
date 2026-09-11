@@ -138,7 +138,15 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          echo "Newsletter generation - coming soon"
+          python3 -c "
+          from newsletter import generate_weekly_recap
+          from sync_db import get_current_week
+          week = get_current_week()
+          if week > 0:
+              generate_weekly_recap(week)
+          else:
+              print('Season not started yet')
+          "
 
       - name: Sync database to JSON
         run: python3 sync_db.py
