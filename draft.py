@@ -288,8 +288,20 @@ def run_draft():
         if player:
             pos = player['position']
             if pos_counts[team_idx].get(pos, 0) >= pos_limits.get(pos, 99):
-                print(f"  ⚠️ Position limit reached for {pos} — skipping")
-            else:
+                print(f"  ⚠️ Position limit reached for {pos} — finding next best")
+                # Find next best available player at a different position
+                for alt_player_id, alt_player in available_players.items():
+                    alt_pos = alt_player['position']
+                    if pos_counts[team_idx].get(alt_pos, 0) < pos_limits.get(alt_pos, 99):
+                        player = alt_player
+                        player_id = alt_player_id
+                        pos = alt_pos
+                        print(f"  → Switching to {player['name']} ({pos})")
+                        break
+                else:
+                    print(f"  ⚠️ No valid pick found — skipping")
+                    continue
+                    
                 rosters[team_idx].append(player)
                 del available_players[player_id]
                 pos_counts[team_idx][pos] = pos_counts[team_idx].get(pos, 0) + 1

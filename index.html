@@ -698,25 +698,84 @@
     }
 
     let currentWeek = 1;
+    let selectedMatchup = null;
     const TOTAL_WEEKS = 18;
+    const API_BASE = window.location.hostname === 'localhost' 
+        ? 'http://localhost:8000' 
+        : 'https://your-railway-url.railway.app';
 
     function loadMatchups() {
-        fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/schedule.json')
+        fetch(`${API_BASE}/api/matchup/${currentWeek}`)
             .then(r => r.json())
-            .then(data => renderMatchups(data, currentWeek))
+            .then(data => renderMatchups(data))
             .catch(() => {
-                document.getElementById('matchupsGrid').innerHTML = 
-                    '<div class="empty" style="grid-column:span 2">Schedule not available yet</div>';
+                // Fallback to schedule.json for upcoming weeks
+                fetch('https://raw.githubusercontent.com/amp25ai/ff-agentic-league/main/schedule.json')
+                    .then(r => r.json())
+                    .then(data => renderMatchupsStatic(data, currentWeek))
+                    .catch(() => {
+                        document.getElementById('matchupsGrid').innerHTML =
+                            '<div class="empty" style="grid-column:span 2">Schedule not available yet</div>';
+                    });
             });
     }
 
-    function renderMatchups(data, week) {
+    function renderMatchups(data) {
+        const grid = document.getElementById('matchupsGrid');
+        const matchups = data.matchups || [];
+        const week = data.week;
+        const status = data.status;
+
+        const navHtml = `
+            <div style="grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">← Prev</button>
+                <div style="text-align:center;">
+                    <div style="font-size:18px;font-weight:700;color:#58a6ff;">Week ${week}</div>
+                    <div style="font-size:11px;color:#8b949e;margin-top:2px;">${status === 'live' ? '🔴 LIVE' : status === 'final' ? '✅ Final' : '📅 Upcoming'}</div>
+                    <button onclick="goToCurrentWeek()" style="background:none;border:none;color:#8b949e;font-size:11px;cursor:pointer;margin-top:4px;">↩ Current Week</button>
+                </div>
+                <button onclick="changeWeek(1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">Next →</button>
+            </div>
+        `;
+
+        const matchupsHtml = matchups.map((m, idx) => {
+            const homeWon = m.winner === m.home.owner;
+            const awayWon = m.winner === m.away.owner;
+            return `
+                <div class="matchup-card" style="width:100%;box-sizing:border-box;cursor:pointer;"
+                     onclick="showMatchupDetail(${idx}, ${JSON.stringify(m).replace(/"/g, '&quot;')})">
+                    <div class="matchup-week">Week ${week} · ${status === 'live' ? '🔴 Live' : status === 'final' ? 'Final' : 'Upcoming'} · Click for details</div>
+                    <div class="matchup-teams">
+                        <div class="matchup-team" style="${homeWon ? 'color:#3fb950' : ''}">
+                            <div class="matchup-team-name">${m.home.team}</div>
+                            <div class="matchup-owner">${m.home.owner}</div>
+                            ${m.home.total_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.home.total_projected.toFixed(1)}</div>` : ''}
+                            ${m.home.total_actual > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">${m.home.total_actual.toFixed(1)}</div>` : ''}
+                        </div>
+                        <div class="matchup-score">
+                            ${m.home.total_actual > 0 || m.away.total_actual > 0
+                                ? `${m.home.total_actual.toFixed(1)}<br><span style="font-size:12px;color:#8b949e">vs</span><br>${m.away.total_actual.toFixed(1)}`
+                                : `<span style="font-size:11px;color:#8b949e">Proj<br>${m.home.total_projected.toFixed(1)}<br>vs<br>${m.away.total_projected.toFixed(1)}</span>`
+                            }
+                        </div>
+                        <div class="matchup-team" style="${awayWon ? 'color:#3fb950' : ''}">
+                            <div class="matchup-team-name">${m.away.team}</div>
+                            <div class="matchup-owner">${m.away.owner}</div>
+                            ${m.away.total_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.away.total_projected.toFixed(1)}</div>` : ''}
+                            ${m.away.total_actual > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">${m.away.total_actual.toFixed(1)}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        grid.innerHTML = navHtml + matchupsHtml;
+    }
+
+    function renderMatchupsStatic(data, week) {
         const weekData = data.schedule.find(w => w.week === week);
         if (!weekData) return;
-
         const grid = document.getElementById('matchupsGrid');
-        
-        // Week navigation header
         const navHtml = `
             <div style="grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
                 <button onclick="changeWeek(-1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">← Prev</button>
@@ -727,34 +786,93 @@
                 <button onclick="changeWeek(1)" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;">Next →</button>
             </div>
         `;
-
         const matchupsHtml = weekData.matchups.map(m => `
             <div class="matchup-card" style="width:100%;box-sizing:border-box;">
-                <div class="matchup-week">Week ${week} · ${m.completed ? 'Final' : 'Upcoming'}</div>
+                <div class="matchup-week">Week ${week} · Upcoming</div>
                 <div class="matchup-teams">
                     <div class="matchup-team">
                         <div class="matchup-team-name">${m.home.name}</div>
                         <div class="matchup-owner">${m.home.owner}</div>
-                        ${m.home_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.home_projected.toFixed(1)}</div>` : ''}
-                        ${m.home_score > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">Actual: ${m.home_score.toFixed(1)}</div>` : ''}
                     </div>
-                    <div class="matchup-score">
-                        ${m.home_score > 0 || m.away_score > 0 
-                            ? `${m.home_score.toFixed(1)}<br><span style="font-size:12px;color:#8b949e">vs</span><br>${m.away_score.toFixed(1)}`
-                            : '<span style="font-size:14px;color:#8b949e">vs</span>'
-                        }
-                    </div>
+                    <div class="matchup-score"><span style="font-size:14px;color:#8b949e">vs</span></div>
                     <div class="matchup-team">
                         <div class="matchup-team-name">${m.away.name}</div>
                         <div class="matchup-owner">${m.away.owner}</div>
-                        ${m.away_projected > 0 ? `<div style="font-size:11px;color:#8b949e;margin-top:4px;">Proj: ${m.away_projected.toFixed(1)}</div>` : ''}
-                        ${m.away_score > 0 ? `<div style="font-size:13px;color:#3fb950;font-weight:700;">Actual: ${m.away_score.toFixed(1)}</div>` : ''}
                     </div>
                 </div>
             </div>
         `).join('');
-
         grid.innerHTML = navHtml + matchupsHtml;
+    }
+
+    function showMatchupDetail(idx, matchup) {
+        selectedMatchup = matchup;
+        // Switch to matchup detail view
+        const grid = document.getElementById('matchupsGrid');
+
+        function playerRow(p) {
+            const isStarter = p.is_starter;
+            const hasActual = p.actual > 0;
+            return `
+                <tr style="border-bottom:1px solid #21262d;${!isStarter ? 'opacity:0.5' : ''}">
+                    <td style="padding:8px 12px;">
+                        <span class="position-badge pos-${p.position}">${p.position}</span>
+                    </td>
+                    <td style="padding:8px 12px;font-size:13px;font-weight:${isStarter ? '600' : '400'}">
+                        ${p.name} ${isStarter ? '' : '<span style="font-size:10px;color:#8b949e">(bench)</span>'}
+                    </td>
+                    <td style="padding:8px 12px;font-size:12px;color:#8b949e">${p.nfl_team}</td>
+                    <td style="padding:8px 12px;font-size:13px;color:#8b949e;text-align:right">${p.projected.toFixed(1)}</td>
+                    <td style="padding:8px 12px;font-size:13px;color:${hasActual ? '#3fb950' : '#8b949e'};font-weight:${hasActual ? '700' : '400'};text-align:right">
+                        ${hasActual ? p.actual.toFixed(1) : '—'}
+                    </td>
+                </tr>
+            `;
+        }
+
+        function teamTable(team) {
+            const starters = team.starters || [];
+            const bench = team.bench || [];
+            const allPlayers = [...starters, ...bench];
+            return `
+                <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:15px;color:#58a6ff;margin-bottom:4px;">${team.team}</div>
+                    <div style="font-size:12px;color:#8b949e;margin-bottom:12px;">${team.owner}</div>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="border-bottom:1px solid #30363d;">
+                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">POS</th>
+                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">PLAYER</th>
+                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:left">NFL</th>
+                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:right">PROJ</th>
+                                <th style="padding:6px 12px;font-size:11px;color:#8b949e;text-align:right">ACTUAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${allPlayers.map(playerRow).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top:2px solid #30363d;">
+                                <td colspan="3" style="padding:10px 12px;font-weight:700;font-size:14px;">TOTAL</td>
+                                <td style="padding:10px 12px;font-size:14px;color:#8b949e;text-align:right;font-weight:700">${team.total_projected.toFixed(1)}</td>
+                                <td style="padding:10px 12px;font-size:14px;color:#3fb950;text-align:right;font-weight:700">${team.total_actual > 0 ? team.total_actual.toFixed(1) : '—'}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        grid.innerHTML = `
+            <div style="grid-column:1/-1;">
+                <button onclick="loadMatchups()" style="background:#21262d;border:1px solid #30363d;color:#e6edf3;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:16px;">← Back to Week ${currentWeek}</button>
+                <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                    ${teamTable(matchup.home)}
+                    <div style="width:1px;background:#30363d;align-self:stretch;"></div>
+                    ${teamTable(matchup.away)}
+                </div>
+            </div>
+        `;
     }
 
     function changeWeek(direction) {
@@ -774,6 +892,13 @@
                 loadMatchups();
             });
     }
+
+    // Auto refresh every 60 seconds when live
+    setInterval(() => {
+        if (document.getElementById('tab-matchups').classList.contains('active')) {
+            loadMatchups();
+        }
+    }, 60000);
 
     // Auto-set to current NFL week on page load
     fetch('https://api.sleeper.app/v1/state/nfl')
