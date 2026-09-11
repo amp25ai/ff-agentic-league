@@ -964,7 +964,7 @@
                     return `
                         <div style="display:flex;flex-direction:column;gap:4px;">
                             <div style="font-size:11px;color:#8b949e;">
-                                ${m.team} · ${m.owner} · Week ${m.week || 0} · ${m.date || ''}
+                                ${m.team} · ${m.owner} · Week ${m.week || 0} · ${m.date || ''} ${m.time ? '@ ' + m.time : ''}
                             </div>
                             <div style="
                                 background:${isTradeMsg ? '#21262d' : '#161b22'};
@@ -988,7 +988,7 @@
     }
 
     loadChat();
-    
+
     // Auto refresh every 5 seconds
     setInterval(loadDraft, 5000);
 </script>

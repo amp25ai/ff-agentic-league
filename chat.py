@@ -277,8 +277,14 @@ def parse_trade_proposal(message, proposing_owner):
         print(f"Trade parse error: {e}")
     return None
 
-def run_daily_chat():
-    """Run the daily chat — agents talk, propose trades, respond"""
+def run_daily_chat(total_messages=None, session_tone=""):
+    """
+    Run daily chat as a natural flowing conversation.
+    Random agent responds to the last message each turn.
+    No rounds — just organic back and forth.
+    """
+    import random
+
     print("\n💬 FF Agentic League — Daily Chat")
     print("=" * 50)
 
@@ -287,132 +293,204 @@ def run_daily_chat():
     standings_str = get_standings_str()
     week = get_current_week()
     today = datetime.now().strftime("%Y-%m-%d")
+    now_time = datetime.now().strftime("%I:%M %p")
+    season_year = "2026"
 
     new_messages = []
-    pending_trades = {}  # owner -> trade offer directed at them
+    session_messages = []
+    pending_trades = {}
 
-    # Each agent gets to speak
-    for agent in AGENTS:
-        print(f"\n{agent['name']} ({agent['owner']}) is typing...")
+    def get_last_few():
+        """Get last 6 messages from this session"""
+        recent = session_messages[-6:] if len(session_messages) > 6 else session_messages
+        if not recent:
+            # Pull from existing log for context
+            existing = log.get("messages", [])[-4:]
+            return "\n".join([f"{m['owner']}: \"{m['message']}\"" for m in existing])
+        return "\n".join([f"{m['owner']}: \"{m['message']}\"" for m in recent])
 
-        recent_chat = get_recent_chat(log)
+    def generate_single_message(agent, pending=None):
+        strategy = load_strategy(agent['strategy_file'])
+        my_roster = format_roster(all_rosters.get(agent['owner'], []), max_players=5)
 
-        # Check if this agent has a pending trade to respond to
-        pending = pending_trades.get(agent['owner'])
+        others = ""
+        for other in AGENTS:
+            if other['owner'] != agent['owner']:
+                roster = format_roster(all_rosters.get(other['owner'], []), max_players=3)
+                others += f"{other['owner']}: {roster}\n"
 
-        raw_response = generate_agent_message(
-            agent, all_rosters, standings_str,
-            week, recent_chat, log,
-            pending_trade=pending
+        trade_context = ""
+        if pending:
+            trade_context = f"""
+{pending['from']} just offered you a trade:
+They give: {pending['offer']}
+They want: {pending['request']}
+
+Respond to it naturally in your message. Start with:
+TRADE_ACCEPT: if you accept
+TRADE_REJECT: if you decline  
+TRADE_COUNTER: if you want to counter
+"""
+
+        prompt = f"""You are {agent['owner']} in a fantasy football group chat. Session vibe: {session_tone} with {', '.join([a['owner'] for a in AGENTS if a['owner'] != agent['owner']])}.
+
+Your strategy personality: {strategy}
+
+Week {week} standings:
+{standings_str}
+
+Your roster: {my_roster}
+Others: {others}
+
+Last few messages in the chat:
+{get_last_few()}
+
+{trade_context}
+
+Send ONE short text message. React to what was just said.
+- 1-2 sentences MAX
+- Casual texting tone
+- Use player names and be specific
+- To propose a trade: TRADE_PROPOSE: [your player] for [their player] @[owner]
+- Don't start with your name
+- No quotes around the message
+- Sound human"""
+
+        r = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=100,
+            messages=[{"role": "user", "content": prompt}]
         )
+        return r.content[0].text.strip()
 
-        # Process each line as a separate message
-        lines = [l.strip() for l in raw_response.split('\n') if l.strip()]
+    def add_msg(agent, text, msg_type="chat", trade=None):
+        msg = {
+            "date": today,
+            "time": now_time,
+            "season": season_year,
+            "week": week,
+            "team": agent['name'],
+            "owner": agent['owner'],
+            "message": text,
+            "type": msg_type,
+        }
 
-        for line in lines[:3]:  # Max 3 messages per agent
-            # Check for trade proposal
-            if "TRADE_PROPOSE:" in line:
-                trade = parse_trade_proposal(line, agent['owner'])
-                if trade:
-                    # Find target agent
-                    target_agent = next(
-                        (a for a in AGENTS
-                         if a['owner'].lower() == trade['to'].lower()),
-                        None
-                    )
-                    if target_agent:
-                        pending_trades[target_agent['owner']] = trade
-                        # Clean message for display
-                        display_msg = line.replace("TRADE_PROPOSE:", "").strip()
-                        if not display_msg:
-                            display_msg = (f"Hey {trade['to']}, I'll give you "
-                                          f"{trade['offer']} for {trade['request']}. Deal?")
-                        msg = {
-                            "date": today,
-                            "week": week,
-                            "team": agent['name'],
-                            "owner": agent['owner'],
-                            "message": display_msg,
-                            "type": "trade_propose",
-                            "trade": trade
-                        }
-                        new_messages.append(msg)
-                        log["messages"].append(msg)
-                        print(f"  💼 Trade proposed: {trade['offer']} for {trade['request']}")
+        if trade:
+            msg["trade"] = trade
+        new_messages.append(msg)
+        session_messages.append(msg)
+        log["messages"].append(msg)
+        print(f"  {agent['owner']}: {text[:100]}")
+        return msg
 
-            elif line.startswith("TRADE_ACCEPT:"):
-                msg_text = line.replace("TRADE_ACCEPT:", "").strip()
-                if pending:
-                    # Execute the trade
-                    success = execute_trade_in_db(
-                        pending['from'], agent['owner'],
-                        pending['offer'], pending['request']
-                    )
-                    trade_status = "✅ TRADE COMPLETED" if success else "⚠️ Trade agreed but execution failed"
-                    display_msg = f"{msg_text} {trade_status}"
-                    msg = {
-                        "date": today,
-                        "week": week,
-                        "team": agent['name'],
-                        "owner": agent['owner'],
-                        "message": display_msg,
-                        "type": "trade_accept",
-                    }
-                    new_messages.append(msg)
-                    log["messages"].append(msg)
-                    print(f"  ✅ Trade accepted and executed!")
-                    pending_trades.pop(agent['owner'], None)
-
-            elif line.startswith("TRADE_REJECT:"):
-                msg_text = line.replace("TRADE_REJECT:", "").strip()
-                msg = {
-                    "date": today,
-                    "week": week,
-                    "team": agent['name'],
-                    "owner": agent['owner'],
-                    "message": msg_text,
-                    "type": "trade_reject",
-                }
-                new_messages.append(msg)
-                log["messages"].append(msg)
-                print(f"  ❌ Trade rejected")
+    def process_message(agent, raw):
+        """Process a raw message — handle trades or add as chat"""
+        if raw.startswith("TRADE_ACCEPT:"):
+            text = raw.replace("TRADE_ACCEPT:", "").strip()
+            pending = pending_trades.get(agent['owner'])
+            if pending:
+                success = execute_trade_in_db(
+                    pending['from'], agent['owner'],
+                    pending['offer'], pending['request']
+                )
+                suffix = " ✅ TRADE DONE" if success else ""
+                add_msg(agent, text + suffix, "trade_accept")
                 pending_trades.pop(agent['owner'], None)
-
-            elif line.startswith("TRADE_COUNTER:"):
-                msg_text = line.replace("TRADE_COUNTER:", "").strip()
-                msg = {
-                    "date": today,
-                    "week": week,
-                    "team": agent['name'],
-                    "owner": agent['owner'],
-                    "message": msg_text,
-                    "type": "trade_counter",
-                }
-                new_messages.append(msg)
-                log["messages"].append(msg)
-                print(f"  🔄 Trade countered")
-
             else:
-                # Regular chat message
-                if line:
-                    msg = {
-                        "date": today,
-                        "week": week,
-                        "team": agent['name'],
-                        "owner": agent['owner'],
-                        "message": line,
-                        "type": "chat",
-                    }
-                    new_messages.append(msg)
-                    log["messages"].append(msg)
+                add_msg(agent, text)
 
-            print(f"  💬 {agent['owner']}: {line[:80]}...")
+        elif raw.startswith("TRADE_REJECT:"):
+            text = raw.replace("TRADE_REJECT:", "").strip()
+            add_msg(agent, text, "trade_reject")
+            pending_trades.pop(agent['owner'], None)
 
-    # Save updated log
+        elif raw.startswith("TRADE_COUNTER:"):
+            text = raw.replace("TRADE_COUNTER:", "").strip()
+            add_msg(agent, text, "trade_counter")
+            trade = parse_trade_proposal(f"TRADE_PROPOSE: {text}", agent['owner'])
+            if trade:
+                target = next((a for a in AGENTS
+                               if a['owner'].lower() == trade['to'].lower()), None)
+                if target:
+                    pending_trades[target['owner']] = trade
+
+        elif "TRADE_PROPOSE:" in raw:
+            trade = parse_trade_proposal(raw, agent['owner'])
+            clean = raw.replace("TRADE_PROPOSE:", "").strip()
+            if not clean:
+                clean = f"Hey, wanna make a deal?"
+            if trade:
+                target = next((a for a in AGENTS
+                               if a['owner'].lower() == trade['to'].lower()), None)
+                if target:
+                    pending_trades[target['owner']] = trade
+                    add_msg(agent, clean, "trade_propose", trade)
+            else:
+                add_msg(agent, clean)
+        else:
+            add_msg(agent, raw)
+
+    # ---- NATURAL CONVERSATION FLOW ----
+    # Total of ~12-16 messages, randomly distributed
+    if total_messages is None:
+        total_messages = random.randint(3, 5)
+
+    # Track who spoke last to avoid same person twice in a row
+    last_speaker = None
+
+    # Weight toward agents with pending trades so they respond
+    for turn in range(total_messages):
+        # Prioritize agents with pending trades
+        if pending_trades:
+            waiting = [a for a in AGENTS if a['owner'] in pending_trades]
+            if waiting and random.random() > 0.3:
+                agent = random.choice(waiting)
+            else:
+                available = [a for a in AGENTS if a != last_speaker]
+                agent = random.choice(available)
+        else:
+            # Anyone except who just spoke
+            available = [a for a in AGENTS if a != last_speaker]
+            agent = random.choice(available)
+
+        pending = pending_trades.get(agent['owner'])
+        raw = generate_single_message(agent, pending=pending)
+        process_message(agent, raw)
+        last_speaker = agent
+
     save_chat_log(log)
-
-    print(f"\n✅ {len(new_messages)} new messages saved to chat_log.json")
+    print(f"\n✅ {len(new_messages)} messages saved")
     return new_messages
 
+
 if __name__ == "__main__":
-    run_daily_chat()
+    import sys
+
+    # Session types affect tone and message count
+    session = sys.argv[1] if len(sys.argv) > 1 else "morning"
+
+    SESSION_CONFIG = {
+        "morning": {
+            "messages": 4,
+            "tone": "Morning energy — reacting to yesterday, making predictions, stirring the pot early"
+        },
+        "midday": {
+            "messages": 3,
+            "tone": "Midday check-in — quick reactions, lunch break banter, injury news reactions"
+        },
+        "afternoon": {
+            "messages": 4,
+            "tone": "Afternoon — trade talk, lineup decisions, serious fantasy business mixed with trash talk"
+        },
+        "evening": {
+            "messages": 4,
+            "tone": "Evening — final trash talk before games, lineup anxiety, bold predictions"
+        },
+    }
+
+    config = SESSION_CONFIG.get(session, SESSION_CONFIG["morning"])
+    print(f"Running {session} session ({config['messages']} messages)")
+    run_daily_chat(
+        total_messages=config['messages'],
+        session_tone=config['tone']
+    )
