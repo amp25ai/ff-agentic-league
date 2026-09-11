@@ -3,7 +3,7 @@ import anthropic
 from database import get_db
 from lineup import get_team_strategy
 
-from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_all_players
+from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_all_players, fetch_injury_status
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
@@ -49,9 +49,11 @@ def ask_claude_for_waiver(team, roster, free_agents, week, strategy, season="202
         season_metrics = get_season_metrics(
             pid, meta, season, week, all_players_meta)
         grade = grade_player_inseason(season_metrics, p['position'], age)
+        injury = fetch_injury_status(all_players_meta, pid)
+        injury_note = f" ⚠️ {injury}" if injury else ""
         context = format_player_context(
             p['name'], p['position'], age, years_exp,
-            season_metrics, inseason_grade=grade)
+            season_metrics, inseason_grade=grade) + injury_note
         roster_lines.append((grade, context))
 
     roster_lines.sort(key=lambda x: x[0], reverse=True)

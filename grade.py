@@ -113,6 +113,15 @@ def fetch_bye_weeks(year=2026):
     print(f"✅ Bye weeks fetched for {len(bye_weeks)} teams")
     return bye_weeks
 
+def fetch_injury_status(all_players_meta, player_id):
+    """
+    Get a player's current injury status from Sleeper metadata.
+    Returns: status string like 'Questionable', 'Out', 'IR', or None if healthy
+    """
+    player = all_players_meta.get(player_id, {})
+    status = player.get("injury_status")
+    return status if status else None
+
 def fetch_all_players():
     """Fetch all NFL player metadata"""
     cache = "all_players.json"

@@ -2,7 +2,7 @@ import os
 import anthropic
 from database import get_db
 
-from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_nfl_state, fetch_all_players
+from grade import grade_player_inseason, get_season_metrics, format_player_context, fetch_nfl_state, fetch_all_players, fetch_injury_status
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
@@ -69,11 +69,15 @@ def ask_claude_for_lineup(team, roster, week, strategy, season="2026"):
         # Calculate in-season grade
         grade = grade_player_inseason(season_metrics, position, age)
         
+        # Check injury status
+        injury = fetch_injury_status(all_players_meta, pid)
+        injury_note = f" ⚠️ {injury}" if injury else ""
+
         # Format context
         context = format_player_context(
             p['name'], position, age, years_exp,
             season_metrics, inseason_grade=grade
-        )
+        ) + injury_note
         roster_lines.append((grade, context))
     
     # Sort by grade
