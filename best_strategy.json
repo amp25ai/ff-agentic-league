@@ -1,0 +1,217 @@
+{
+  "generated": "2026-09-10T21:16:29.367430",
+  "seasons_tested": [
+    2024,
+    2025
+  ],
+  "total_combinations_tested": 1180980,
+  "best_edge": 646.71,
+  "best_params": {
+    "historical_weight": 0.3,
+    "dynamic_weight": 0.7,
+    "projection_influence": 0.0,
+    "use_age_discount": true,
+    "aggressive_age": false,
+    "injury_mode": "none",
+    "skill_ts_weight": 0.4,
+    "skill_wopr_weight": 0.35,
+    "skill_rz_weight": 0.15,
+    "skill_snap_weight": 0.25,
+    "rb_opp_weight": 0.55,
+    "rb_ts_weight": 0.2,
+    "rb_rz_weight": 0.05,
+    "rb_snap_weight": 0.2
+  },
+  "top_10": [
+    {
+      "params": {
+        "historical_weight": 0.3,
+        "dynamic_weight": 0.7,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.4,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 646.71
+    },
+    {
+      "params": {
+        "historical_weight": 0.4,
+        "dynamic_weight": 0.6,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.4,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 646.71
+    },
+    {
+      "params": {
+        "historical_weight": 0.5,
+        "dynamic_weight": 0.5,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.4,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 646.71
+    },
+    {
+      "params": {
+        "historical_weight": 0.6,
+        "dynamic_weight": 0.4,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.4,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 646.71
+    },
+    {
+      "params": {
+        "historical_weight": 0.7,
+        "dynamic_weight": 0.3,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.4,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 646.71
+    },
+    {
+      "params": {
+        "historical_weight": 0.3,
+        "dynamic_weight": 0.7,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.5,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 615.91
+    },
+    {
+      "params": {
+        "historical_weight": 0.4,
+        "dynamic_weight": 0.6,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.5,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 615.91
+    },
+    {
+      "params": {
+        "historical_weight": 0.5,
+        "dynamic_weight": 0.5,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.5,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 615.91
+    },
+    {
+      "params": {
+        "historical_weight": 0.6,
+        "dynamic_weight": 0.4,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.5,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 615.91
+    },
+    {
+      "params": {
+        "historical_weight": 0.7,
+        "dynamic_weight": 0.3,
+        "projection_influence": 0.0,
+        "use_age_discount": true,
+        "aggressive_age": false,
+        "injury_mode": "none",
+        "skill_ts_weight": 0.5,
+        "skill_wopr_weight": 0.35,
+        "skill_rz_weight": 0.15,
+        "skill_snap_weight": 0.25,
+        "rb_opp_weight": 0.55,
+        "rb_ts_weight": 0.2,
+        "rb_rz_weight": 0.05,
+        "rb_snap_weight": 0.2
+      },
+      "total_edge": 615.91
+    }
+  ]
+}
