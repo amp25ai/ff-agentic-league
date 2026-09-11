@@ -1,0 +1,149 @@
+name: Season Automation
+
+on:
+  schedule:
+    # Tuesday 6am ET — fetch scores, update standings, generate newsletter
+    - cron: '0 11 * * 2'
+    # Wednesday 10am ET — waivers and trades
+    - cron: '0 15 * * 3'
+    # Thursday 10am ET — set lineups before games
+    - cron: '0 15 * * 4'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Task to run manually'
+        required: true
+        default: 'scores'
+        type: choice
+        options:
+          - scores
+          - waivers
+          - trades
+          - lineups
+          - newsletter
+          - all
+
+jobs:
+  season:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests fastapi uvicorn
+
+      - name: Determine task based on day
+        id: task
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "task=${{ github.event.inputs.task }}" >> $GITHUB_OUTPUT
+          else
+            DAY=$(date -u +%u)  # 2=Tuesday, 3=Wednesday, 4=Thursday
+            if [ "$DAY" = "2" ]; then
+              echo "task=scores" >> $GITHUB_OUTPUT
+            elif [ "$DAY" = "3" ]; then
+              echo "task=waivers_and_trades" >> $GITHUB_OUTPUT
+            elif [ "$DAY" = "4" ]; then
+              echo "task=lineups" >> $GITHUB_OUTPUT
+            else
+              echo "task=none" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Run scores and standings (Tuesday)
+        if: steps.task.outputs.task == 'scores' || steps.task.outputs.task == 'all'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 -c "
+          import subprocess, sys
+          from scores import run_scores
+          from database import get_db
+          # Get current week
+          conn = get_db()
+          c = conn.cursor()
+          c.execute('SELECT MAX(week) FROM matchups WHERE completed = 0')
+          result = c.fetchone()[0]
+          conn.close()
+          week = result or 1
+          print(f'Running scores for week {week}')
+          run_scores(week)
+          "
+
+      - name: Run waivers (Wednesday)
+        if: steps.task.outputs.task == 'waivers_and_trades' || steps.task.outputs.task == 'waivers' || steps.task.outputs.task == 'all'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 -c "
+          from waivers import run_waivers
+          from database import get_db
+          conn = get_db()
+          c = conn.cursor()
+          c.execute('SELECT MAX(week) FROM matchups WHERE completed = 0')
+          result = c.fetchone()[0]
+          conn.close()
+          week = result or 1
+          print(f'Running waivers for week {week}')
+          run_waivers(week)
+          "
+
+      - name: Run trades (Wednesday)
+        if: steps.task.outputs.task == 'waivers_and_trades' || steps.task.outputs.task == 'trades' || steps.task.outputs.task == 'all'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 -c "
+          from trades import run_trades
+          from database import get_db
+          conn = get_db()
+          c = conn.cursor()
+          c.execute('SELECT MAX(week) FROM matchups WHERE completed = 0')
+          result = c.fetchone()[0]
+          conn.close()
+          week = result or 1
+          print(f'Running trades for week {week}')
+          run_trades(week)
+          "
+
+      - name: Run lineups (Thursday)
+        if: steps.task.outputs.task == 'lineups' || steps.task.outputs.task == 'all'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 -c "
+          from lineup import set_all_lineups
+          from database import get_db
+          conn = get_db()
+          c = conn.cursor()
+          c.execute('SELECT MAX(week) FROM matchups WHERE completed = 0')
+          result = c.fetchone()[0]
+          conn.close()
+          week = result or 1
+          print(f'Setting lineups for week {week}')
+          set_all_lineups(week)
+          "
+
+      - name: Run newsletter (Tuesday)
+        if: steps.task.outputs.task == 'scores' || steps.task.outputs.task == 'newsletter' || steps.task.outputs.task == 'all'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          echo "Newsletter generation - coming soon"
+
+      - name: Commit and push all changes
+        run: |
+          git config user.name "FF Season Bot"
+          git config user.email "bot@ffagent.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Season update: ${{ steps.task.outputs.task }} - Week $(date +%V)"
+          git push
