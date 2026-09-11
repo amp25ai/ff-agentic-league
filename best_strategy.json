@@ -1,217 +1,65 @@
 {
-  "generated": "2026-09-10T21:16:29.367430",
-  "seasons_tested": [
+  "generated": "2026-09-11T12:04:58.717666",
+  "in_sample_seasons": [
+    2021,
+    2022,
+    2023
+  ],
+  "out_of_sample_seasons": [
     2024,
     2025
   ],
-  "total_combinations_tested": 1180980,
-  "best_edge": 646.71,
+  "total_combos_tested": 54,
+  "in_sample_win_rate": 0.641,
+  "out_of_sample_win_rate": 0.4231,
+  "verdict": "\u274c OVERFIT \u2014 strategy fails on unseen data",
   "best_params": {
-    "historical_weight": 0.3,
-    "dynamic_weight": 0.7,
-    "projection_influence": 0.0,
-    "use_age_discount": true,
-    "aggressive_age": false,
-    "injury_mode": "none",
-    "skill_ts_weight": 0.4,
-    "skill_wopr_weight": 0.35,
-    "skill_rz_weight": 0.15,
-    "skill_snap_weight": 0.25,
-    "rb_opp_weight": 0.55,
-    "rb_ts_weight": 0.2,
-    "rb_rz_weight": 0.05,
-    "rb_snap_weight": 0.2
+    "hist_w": 0.3,
+    "dyn_w": 0.7,
+    "proj_influence": 0.33,
+    "age_discount": "mild",
+    "injury_penalty": "none"
   },
-  "top_10": [
+  "top_10_in_sample": [
     {
-      "params": {
-        "historical_weight": 0.3,
-        "dynamic_weight": 0.7,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.4,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 646.71
+      "label": "hist=30/dyn=70 | proj=33% | age=mild | inj=none",
+      "win_rate": 0.641
     },
     {
-      "params": {
-        "historical_weight": 0.4,
-        "dynamic_weight": 0.6,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.4,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 646.71
+      "label": "hist=50/dyn=50 | proj=33% | age=mild | inj=none",
+      "win_rate": 0.641
     },
     {
-      "params": {
-        "historical_weight": 0.5,
-        "dynamic_weight": 0.5,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.4,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 646.71
+      "label": "hist=70/dyn=30 | proj=33% | age=mild | inj=none",
+      "win_rate": 0.641
     },
     {
-      "params": {
-        "historical_weight": 0.6,
-        "dynamic_weight": 0.4,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.4,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 646.71
+      "label": "hist=30/dyn=70 | proj=66% | age=none | inj=mild",
+      "win_rate": 0.5897
     },
     {
-      "params": {
-        "historical_weight": 0.7,
-        "dynamic_weight": 0.3,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.4,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 646.71
+      "label": "hist=50/dyn=50 | proj=66% | age=none | inj=mild",
+      "win_rate": 0.5897
     },
     {
-      "params": {
-        "historical_weight": 0.3,
-        "dynamic_weight": 0.7,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.5,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 615.91
+      "label": "hist=70/dyn=30 | proj=66% | age=none | inj=mild",
+      "win_rate": 0.5897
     },
     {
-      "params": {
-        "historical_weight": 0.4,
-        "dynamic_weight": 0.6,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.5,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 615.91
+      "label": "hist=30/dyn=70 | proj=33% | age=none | inj=mild",
+      "win_rate": 0.5641
     },
     {
-      "params": {
-        "historical_weight": 0.5,
-        "dynamic_weight": 0.5,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.5,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 615.91
+      "label": "hist=50/dyn=50 | proj=33% | age=none | inj=mild",
+      "win_rate": 0.5641
     },
     {
-      "params": {
-        "historical_weight": 0.6,
-        "dynamic_weight": 0.4,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.5,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 615.91
+      "label": "hist=70/dyn=30 | proj=33% | age=none | inj=mild",
+      "win_rate": 0.5641
     },
     {
-      "params": {
-        "historical_weight": 0.7,
-        "dynamic_weight": 0.3,
-        "projection_influence": 0.0,
-        "use_age_discount": true,
-        "aggressive_age": false,
-        "injury_mode": "none",
-        "skill_ts_weight": 0.5,
-        "skill_wopr_weight": 0.35,
-        "skill_rz_weight": 0.15,
-        "skill_snap_weight": 0.25,
-        "rb_opp_weight": 0.55,
-        "rb_ts_weight": 0.2,
-        "rb_rz_weight": 0.05,
-        "rb_snap_weight": 0.2
-      },
-      "total_edge": 615.91
+      "label": "hist=30/dyn=70 | proj=0% | age=mild | inj=mild",
+      "win_rate": 0.5385
     }
   ]
 }
