@@ -730,18 +730,6 @@
 
     loadNewsletters();       
 
-        body.innerHTML = teams.map((t, i) => `
-            <tr>
-                <td class="rank ${i === 0 ? 'first' : i === 1 ? 'second' : i === 2 ? 'third' : ''}">${RANK_LABELS[i]}</td>
-                <td class="team-name-cell">${t.name}</td>
-                <td class="owner-cell">${t.owner}</td>
-                <td class="record-cell">${t.wins}</td>
-                <td class="record-cell">${t.losses}</td>
-                <td class="points-cell">${t.points.toFixed(1)}</td>
-            </tr>
-        `).join('');
-    }
-
     let currentWeek = 1;
     let selectedMatchup = null;
     const TOTAL_WEEKS = 18;
