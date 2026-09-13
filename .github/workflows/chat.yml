@@ -2,9 +2,6 @@ name: Daily League Chat
 
 on:
   schedule:
-    - cron: '0 13 * * *'   # 8am ET morning session
-    - cron: '0 17 * * *'   # 12pm ET midday session
-    - cron: '0 21 * * *'   # 4pm ET afternoon session
     - cron: '0 1 * * *'    # 8pm ET evening session
   workflow_dispatch:
 
@@ -29,16 +26,7 @@ jobs:
       - name: Determine session
         id: session
         run: |
-          HOUR=$(date -u +%H)
-          if [ "$HOUR" = "13" ]; then
-            echo "session=morning" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "17" ]; then
-            echo "session=midday" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "21" ]; then
-            echo "session=afternoon" >> $GITHUB_OUTPUT
-          else
-            echo "session=evening" >> $GITHUB_OUTPUT
-          fi
+          echo "session=evening" >> $GITHUB_OUTPUT
 
       - name: Run chat session
         env:
