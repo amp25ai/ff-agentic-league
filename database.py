@@ -112,6 +112,17 @@ def create_tables():
         )
     ''')
 
+    # Migration: add original_projected_points column if it doesn't exist yet
+    # (safe to run repeatedly — checks first, does nothing if already present)
+    c.execute("PRAGMA table_info(weekly_scores)")
+    existing_columns = [row[1] for row in c.fetchall()]
+    if "original_projected_points" not in existing_columns:
+        c.execute('''
+            ALTER TABLE weekly_scores 
+            ADD COLUMN original_projected_points REAL DEFAULT 0
+        ''')
+        print("✅ Migrated: added original_projected_points column")
+
     conn.commit()
     conn.close()
     print("✅ All tables created successfully")

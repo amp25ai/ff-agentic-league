@@ -8,6 +8,13 @@ on:
     - cron: '0 15 * * 3'
     # Thursday 10am ET — set lineups before games
     - cron: '0 15 * * 4'
+    # Live projections — Sunday 1pm-11:40pm ET, every 20 min (17:00-03:40 UTC)
+    - cron: '*/20 17-23 * * 0'
+    - cron: '*/20 0-3 * * 1'
+    # Live projections — Monday Night Football 8pm-11:40pm ET (0:00-3:40 UTC Tue)
+    - cron: '*/20 0-3 * * 2'
+    # Live projections — Thursday Night Football 8pm-11:40pm ET (0:00-3:40 UTC Fri)
+    - cron: '*/20 0-3 * * 5'
   workflow_dispatch:
     inputs:
       task:
@@ -21,6 +28,7 @@ on:
           - trades
           - lineups
           - newsletter
+          - live_scores
           - all
 
 jobs:
@@ -47,15 +55,16 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "task=${{ github.event.inputs.task }}" >> $GITHUB_OUTPUT
           else
-            DAY=$(date -u +%u)  # 2=Tuesday, 3=Wednesday, 4=Thursday
-            if [ "$DAY" = "2" ]; then
+            DAY=$(date -u +%u)  # 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 0=Sun
+            HOUR=$(date -u +%H)
+            if [ "$DAY" = "2" ] && [ "$HOUR" = "11" ]; then
               echo "task=scores" >> $GITHUB_OUTPUT
             elif [ "$DAY" = "3" ]; then
               echo "task=waivers_and_trades" >> $GITHUB_OUTPUT
-            elif [ "$DAY" = "4" ]; then
+            elif [ "$DAY" = "4" ] && [ "$HOUR" = "15" ]; then
               echo "task=lineups" >> $GITHUB_OUTPUT
             else
-              echo "task=none" >> $GITHUB_OUTPUT
+              echo "task=live_scores" >> $GITHUB_OUTPUT
             fi
           fi
 
@@ -77,6 +86,22 @@ jobs:
           week = result or 1
           print(f'Running scores for week {week}')
           run_scores(week)
+          "
+
+      - name: Run live pace-adjusted projections (game windows)
+        if: steps.task.outputs.task == 'live_scores'
+        run: |
+          python3 -c "
+          from scores import calculate_live_projections
+          from database import get_db
+          conn = get_db()
+          c = conn.cursor()
+          c.execute('SELECT MAX(week) FROM matchups WHERE completed = 0')
+          result = c.fetchone()[0]
+          conn.close()
+          week = result or 1
+          print(f'Calculating live projections for week {week}')
+          calculate_live_projections(week)
           "
 
       - name: Run waivers (Wednesday)

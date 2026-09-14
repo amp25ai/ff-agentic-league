@@ -38,7 +38,9 @@ def get_actual_scores(week, season="2026"):
     return scores
 
 def update_projected_scores(week):
-    """Update projected scores for all starters this week"""
+    """Update projected scores for all starters this week.
+    Also freezes original_projected_points the first time it's set —
+    never overwrites it again once populated."""
     projections = get_projections(week)
     if not projections:
         return
@@ -57,16 +59,137 @@ def update_projected_scores(week):
     updated = 0
     for starter in starters:
         proj = projections.get(starter['player_id'], 0)
+
+        # Always update the "current" projected_points
         c.execute('''
             UPDATE weekly_scores
             SET projected_points = ?
             WHERE week = ? AND player_id = ? AND is_starter = 1
         ''', (proj, week, starter['player_id']))
+
+        # Only freeze original_projected_points if it's still 0 (unset)
+        c.execute('''
+            UPDATE weekly_scores
+            SET original_projected_points = ?
+            WHERE week = ? AND player_id = ? AND is_starter = 1
+            AND (original_projected_points IS NULL OR original_projected_points = 0)
+        ''', (proj, week, starter['player_id']))
+
         updated += 1
 
     conn.commit()
     conn.close()
-    print(f"✅ Updated projected scores for {updated} starters in week {week}")
+    print(f"✅ Updated projected scores for {updated} starters in week {week} (original frozen if not already set)")
+
+def get_espn_game_states(year=2026, week=1):
+    """
+    Fetch live game state (elapsed fraction) for every NFL team this week,
+    keyed by team abbreviation. Used to pace-adjust live projections.
+    Returns: {team_abbr: elapsed_fraction} where 0.0 = not started, 1.0 = final
+    """
+    url = (f"https://site.api.espn.com/apis/site/v2/sports/football/"
+           f"nfl/scoreboard?seasontype=2&week={week}&year={year}")
+    try:
+        r = requests.get(url, timeout=10)
+        data = r.json()
+    except Exception:
+        return {}
+
+    espn_to_sleeper = {'LAR': 'LA', 'WSH': 'WAS'}
+    team_elapsed = {}
+
+    for event in data.get('events', []):
+        competitions = event.get('competitions', [{}])
+        if not competitions:
+            continue
+        comp = competitions[0]
+        status = comp.get('status', event.get('status', {}))
+        state = status.get('type', {}).get('state', 'pre')
+
+        if state == 'pre':
+            elapsed = 0.0
+        elif state == 'post':
+            elapsed = 1.0
+        else:
+            period = status.get('period', 1) or 1
+            clock_str = status.get('displayClock', '15:00') or '15:00'
+            try:
+                minutes, seconds = clock_str.split(':')
+                remaining_in_period = int(minutes) + int(seconds) / 60
+            except Exception:
+                remaining_in_period = 15.0
+            elapsed_minutes = (period - 1) * 15 + (15 - remaining_in_period)
+            elapsed = min(1.0, max(0.0, elapsed_minutes / 60))
+
+        # Get both team abbreviations in this game
+        competitors = comp.get('competitors', [])
+        for team_data in competitors:
+            abbr = team_data.get('team', {}).get('abbreviation', '')
+            abbr = espn_to_sleeper.get(abbr, abbr)
+            if abbr:
+                team_elapsed[abbr] = elapsed
+
+    return team_elapsed
+
+def calculate_live_projections(week, season="2026"):
+    """
+    Calculate pace-adjusted live projections for every starter this week.
+    Updates 'projected_points' in the database with the live estimate
+    while games are in progress. Falls back to original_projected_points
+    for games that haven't started or are already final.
+    """
+    print(f"⚡ Calculating live pace-adjusted projections for week {week}...")
+
+    game_states = get_espn_game_states(int(season), week)
+    if not game_states:
+        print("  ⚠️ Could not fetch ESPN game states — skipping live update")
+        return
+
+    actual_stats = get_actual_scores(week, season)
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute('''
+        SELECT ws.player_id, ws.original_projected_points, p.nfl_team, p.name
+        FROM weekly_scores ws
+        JOIN players p ON ws.player_id = p.id
+        WHERE ws.week = ? AND ws.is_starter = 1
+    ''', (week,))
+    starters = [dict(row) for row in c.fetchall()]
+
+    updated = 0
+    for starter in starters:
+        team = starter['nfl_team']
+        original_proj = starter['original_projected_points'] or 0
+        elapsed = game_states.get(team)
+
+        if elapsed is None:
+            # No game data found for this team this week (bye, etc.) — skip
+            continue
+
+        actual = actual_stats.get(starter['player_id'], 0)
+
+        if elapsed <= 0:
+            # Game hasn't started — show original projection
+            live_value = original_proj
+        elif elapsed >= 1:
+            # Game is final — revert to original projection per user's spec
+            live_value = original_proj
+        else:
+            # Game in progress — pace-adjusted blend
+            live_value = actual + (original_proj * (1 - elapsed))
+
+        c.execute('''
+            UPDATE weekly_scores
+            SET projected_points = ?
+            WHERE week = ? AND player_id = ? AND is_starter = 1
+        ''', (round(live_value, 2), week, starter['player_id']))
+        updated += 1
+
+    conn.commit()
+    conn.close()
+    print(f"✅ Live projections updated for {updated} starters")
 
 def update_actual_scores(week):
     """Update actual scores after games are played"""
