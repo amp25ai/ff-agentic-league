@@ -71,46 +71,40 @@ def get_roster_by_owner(owner, draft_results=None):
         return rosters.get(owner, [])
     return []
 
-def score_lineup(roster, stats, projections):
+def load_weekly_scores():
+    """Load the locked weekly scores/lineups exported by sync_db.py"""
+    try:
+        with open("weekly_scores.json") as f:
+            return json.load(f).get("scores", [])
+    except:
+        return []
+
+def score_lineup(owner, week, all_weekly_scores):
     """
-    Score a team's best lineup for a given week.
-    Returns player-by-player breakdown with projected and actual points.
+    Build a team's lineup breakdown for a given week using the LOCKED
+    is_starter flag set once by lineup.py — never recalculated live.
+    Projected points reflect scores.py's dynamic pace-adjusted value
+    (static pre-game, live during the game, frozen-original after final).
     """
-    positions = ["QB", "RB", "WR", "TE", "K"]
+    team_scores = [
+        s for s in all_weekly_scores
+        if s["owner"] == owner and s["week"] == week
+    ]
+
     player_scores = []
-
-    for player in roster:
-        pid = player.get("id", "")
-        name = player.get("name", "")
-        position = player.get("position", "")
-        team = player.get("team", "FA")
-
-        actual = 0
-        projected = 0
-
-        if pid in stats:
-            actual = stats[pid].get("pts_ppr", 0) or 0
-        if pid in projections:
-            projected = projections[pid].get("pts_ppr", 0) or 0
-
+    for s in team_scores:
         player_scores.append({
-            "id":        pid,
-            "name":      name,
-            "position":  position,
-            "nfl_team":  team,
-            "projected": round(projected, 2),
-            "actual":    round(actual, 2),
+            "id":        s["player_id"],
+            "name":      s["player"],
+            "position":  s["position"],
+            "nfl_team":  s["nfl_team"] or "FA",
+            "projected": round(s["projected_points"] or 0, 2),
+            "actual":    round(s["points"] or 0, 2),
+            "is_starter": bool(s["is_starter"]),
         })
 
-    # Pick optimal starting lineup
-    starters = pick_optimal_lineup(player_scores)
-    bench = [p for p in player_scores
-             if p["name"] not in {s["name"] for s in starters}]
-
-    for p in starters:
-        p["is_starter"] = True
-    for p in bench:
-        p["is_starter"] = False
+    starters = [p for p in player_scores if p["is_starter"]]
+    bench    = [p for p in player_scores if not p["is_starter"]]
 
     starter_projected = round(sum(p["projected"] for p in starters), 2)
     starter_actual    = round(sum(p["actual"]    for p in starters), 2)
@@ -121,40 +115,6 @@ def score_lineup(roster, stats, projections):
         "total_projected": starter_projected,
         "total_actual":    starter_actual,
     }
-
-def pick_optimal_lineup(players):
-    """Pick best PPR lineup: 1 QB, 2 RB, 2 WR, 1 TE, 1 FLEX, 1 K"""
-    by_pos = {}
-    for p in players:
-        by_pos.setdefault(p["position"], []).append(p)
-
-    # Sort by actual points if available, else projected
-    for pos in by_pos:
-        by_pos[pos].sort(
-            key=lambda x: x["actual"] if x["actual"] > 0 else x["projected"],
-            reverse=True
-        )
-
-    starters = []
-    used = set()
-
-    for pos, count in [("QB",1), ("RB",2), ("WR",2), ("TE",1), ("K",1)]:
-        for p in [x for x in by_pos.get(pos,[]) if x["name"] not in used][:count]:
-            starters.append(p)
-            used.add(p["name"])
-
-    # FLEX — best remaining RB/WR/TE
-    flex = sorted(
-        [p for pos in ["RB","WR","TE"]
-         for p in by_pos.get(pos,[]) if p["name"] not in used],
-        key=lambda x: x["actual"] if x["actual"] > 0 else x["projected"],
-        reverse=True
-    )
-    if flex:
-        starters.append(flex[0])
-
-    return starters
-
 # ============================================================
 # API ENDPOINTS
 # ============================================================
@@ -206,11 +166,9 @@ def get_week_matchups(week: int):
         home = matchup["home"]
         away = matchup["away"]
 
-        home_roster = get_roster_by_owner(home["owner"], draft)
-        away_roster = get_roster_by_owner(away["owner"], draft)
-
-        home_scores = score_lineup(home_roster, stats, projections)
-        away_scores = score_lineup(away_roster, stats, projections)
+        all_weekly_scores = load_weekly_scores()
+        home_scores = score_lineup(home["owner"], week, all_weekly_scores)
+        away_scores = score_lineup(away["owner"], week, all_weekly_scores)
 
         # Determine winner if game is final
         winner = None
